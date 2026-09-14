@@ -28,6 +28,30 @@
         </field>
     </record>
 
+
+   <record id="view_property_search" model="ir.ui.view">
+        <field name="name">real_estate.property.search</field>
+        <field name="model">real_estate.property</field>
+        <field name="arch" type="xml">
+            <search string="Search Properties">
+                <field name="name"/>
+                <field name="price"/>
+                <separator/>
+                <filter string="available" name="available" domain="[('available', '=', True)]"/>
+               
+             <filter string="not available" name="not_available" domain="[('available', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_by_type" context="{'group_by': 'property_type'}"/>
+                    <filter string="Availability" name="group_by_availability" context="{'group_by': 'available'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+
+
     <!-- Property Kanban View -->
     <record id="view_property_kanban" model="ir.ui.view">
         <field name="name">real_estate.property.kanban</field>

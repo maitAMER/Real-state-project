@@ -16,6 +16,11 @@ class Tenant(models.Model):
     notes = fields.Text(string='Notes')
     active = fields.Boolean(string='Active', default=True)
     crm_id=fields.Many2one('crm.lead', string='CRM Lead')
+    age_category= fields.Selection([
+            ('a', '0-20'),
+            ('b', '21-40'),
+            ('c', '41-60'),
+        ], string='Age Category')
 
     def set_name_in_notes(self):
         """Write the tenant name into the notes field"""

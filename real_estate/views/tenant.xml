@@ -38,6 +38,7 @@
                             <field name="phone"/>
                             <field name="mobile"/>
                             <field name="city"/>
+                            <field name="age_category"/>
                         </group>
 
                         <group string="Additional Information">
@@ -59,6 +60,32 @@
             </form>
         </field>
     </record>
+
+
+ <!-- Tenant Search View -->
+    <record id="view_tenant_search" model="ir.ui.view">
+        <field name="name">real_estate.tenant.search</field>
+        <field name="model">real_estate.tenant</field>
+        <field name="arch" type="xml">
+            <search string="Search Tenants">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="age_category"/>
+                <separator/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                  <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Type" name="group_by_age_category" context="{'group_by': 'age_category'}"/>
+                    <filter string="age_category" name="group_by_city" context="{'group_by': 'city'}"/>
+                </group>
+            </search>
+            
+        </field>
+    </record>
+
+
   <!-- Tenant Kanban View -->
     <record id="view_tenant_kanban" model="ir.ui.view">
         <field name="name">real_estate.tenant.kanban</field>
