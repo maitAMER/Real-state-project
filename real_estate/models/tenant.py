@@ -1,0 +1,34 @@
+from odoo import models, fields, api
+
+class Tenant(models.Model):
+    _name = 'real_estate.tenant'
+    _description = 'Real Estate Tenant'
+    _order = 'name asc'
+    
+    # === CORE FIELDS ===
+    name = fields.Char(string='Tenant Name', required=True, index=True)
+    email = fields.Char(string='Email', required=True, index=True)
+    phone = fields.Char(string='Phone Number')
+    mobile = fields.Char(string='Mobile Number')
+    city = fields.Char(string='City')
+    date_joined = fields.Date(string='Date Joined', default=fields.Date.today, readonly=True)
+    date_of_birth = fields.Date(string='Date of Birth')
+    notes = fields.Text(string='Notes')
+    active = fields.Boolean(string='Active', default=True)
+    crm_id=fields.Many2one('crm.lead', string='CRM Lead')
+
+    def set_name_in_notes(self):
+        """Write the tenant name into the notes field"""
+        for record in self:
+            if record.notes:
+                record.notes += '\n' + record.name
+            else:
+                record.notes = record.name
+
+ 
+    def add_crm_lead_name_to_notes(self):
+             for record in self:
+              if record.crm_id.email_from:
+               record.write({'notes': record.crm_id.email_from}) 
+             else:
+              record.write({'notes': record.crm_id.website})
