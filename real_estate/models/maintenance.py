@@ -27,3 +27,4 @@ class MaintenanceRequest(models.Model):
     scheduled_date = fields.Date()
     completion_date = fields.Date()
     actual_cost = fields.Float()
+    

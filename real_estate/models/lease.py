@@ -23,3 +23,20 @@ class Lease(models.Model):
     end_date = fields.Date(string='End Date', required=True)
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
     deposit_paid = fields.Float(string='Deposit Paid')
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('active', 'Active'),
+        ('at_risk', 'At Risk'),
+        ('expired', 'Expired'),
+        ('cancelled', 'Cancelled'),
+    ], string='Status', default='draft', required=True)
+
+    def convert_to_active(self):
+        for record in self:
+            record.write({'state': 'active'})
+
+
+    def convert_to_draft(self):
+        for record in self:
+            record.write({'state': 'draft'})
+    
