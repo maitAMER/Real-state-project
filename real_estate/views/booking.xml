@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View-->
+    <record id="view_booking_tree" model="ir.ui.view">
+        <field name="name">real_estate.booking.tree</field>
+        <field name="model">real_estate.booking</field>
+        <field name="arch" type="xml">
+            <tree string="Bookings">
+                <field name="name"/>
+                <field name="agent_id"/>
+                <field name="property_id"/>
+                <field name="booking_date"/>
+         </tree>
+        </field>
+    </record>
+    <!-- Search View -->
+    <record id="view_booking_search" model="ir.ui.view">
+        <field name="name">real_estate.booking.search</field>
+        <field name="model">real_estate.booking</field>
+        <field name="arch" type="xml">
+            <search string="Search Bookings">
+                <field name="property_id"/>
+                <field name="booking_date"/>
+               <!--Group by-->
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Property" name="state" context="{'group_by': 'state'}"/>
+                    <filter string="name" name="name" context="{'group_by': 'name'}"/>
+
+                </group>
+            </search>
+        </field>
+    </record>
+
+ <!-- Kanban View-->
+    <record id="view_lease_booking_kanban" model="ir.ui.view">
+        <field name="name">real_estate.booking.kanban</field>
+        <field name="model">real_estate.booking</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="agent_id"/>
+                <field name="property_id"/>
+                <field name="booking_date"/>
+
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div class="mt-1">
+                                    name: <field name="name"/>
+                                </div>
+                                <div class="mt-1">
+                                    Agent: <field name="agent_id"/>
+                                </div>
+                                 <div class="mt-1">
+                                    Property: <field name="property_id"/>
+                                </div>
+                                <div class="mt-1">
+                                    Booking Date: <field name="booking_date"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+      <!-- Form View-->
+    <record id="view_booking_form" model="ir.ui.view">
+        <field name="name">real_estate.booking.form</field>
+        <field name="model">real_estate.booking</field>
+        <field name="arch" type="xml">
+            <form string="Booking">
+            <header>
+            <button name="convert_to_draft" type="object" string="Mark to Draft" class="oe_highlight" invisible="state == 'draft'"/>
+            <button name="convert_to_confirmed" type="object" string="Mark as Confirmed" class="oe_highlight" invisible="state == 'confirmed'"/>
+<field name="state" widget="statusbar" statusbar_visible="draft,confirmed,converted,cancelled"/>
+            </header>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="agent_id"/>
+                        <field name="property_id"/>
+                        <field name="booking_date"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+       <!-- Action-->
+    <record id="action_booking" model="ir.actions.act_window">
+        <field name="name">Bookings</field>
+        <field name="res_model">real_estate.booking</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="search_view_id" ref="view_booking_search"/>
+    </record>
+    </odoo>

@@ -23,4 +23,10 @@
               parent="menu_real_estate_root"
               action="action_lease"
               sequence="10"/>
+
+               <menuitem id="menu_booking"
+              name="Booking"
+              parent="menu_real_estate_root"
+              action="action_booking"
+              sequence="15"/>
 </odoo>

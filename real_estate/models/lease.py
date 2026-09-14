@@ -4,7 +4,7 @@ class Lease(models.Model):
     _name = 'real_estate.lease'
     _description = 'Property Lease Agreement'
     
-    name = fields.Char(string='Lease Reference', required=True, readonly=True, default='New')
+    name = fields.Char(string='lease Reference', required=True, copy=False)
     property_id = fields.Many2one(
         'real_estate.property',
         string='Property',
@@ -23,6 +23,7 @@ class Lease(models.Model):
     end_date = fields.Date(string='End Date', required=True)
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
     deposit_paid = fields.Float(string='Deposit Paid')
+    booking_id = fields.Many2one('real_estate.booking', string='Booking Reference')
     state = fields.Selection([
         ('draft', 'Draft'),
         ('active', 'Active'),

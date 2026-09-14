@@ -13,6 +13,7 @@
                 <field name="end_date"/>
                 <field name="monthly_rent"/>
                 <field name="deposit_paid"/>
+                <field name="booking_id"/>
             </tree>
         </field>
     </record>
@@ -29,7 +30,7 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="state"/>
-
+   <!--Group by-->
                 <separator/>
                 <group expand="0" string="Group By">
                     <filter string="Property" name="group_by_property" context="{'group_by': 'property_id'}"/>
@@ -107,6 +108,8 @@
                         <field name="end_date"/>
                         <field name="monthly_rent"/>
                         <field name="deposit_paid"/>
+                        <field name="booking_id"/>
+
                     </group>
                 </sheet>
             </form>
