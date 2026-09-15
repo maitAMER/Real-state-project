@@ -1,5 +1,6 @@
 from odoo import models, fields, api
-
+from odoo.addons.crm.populate.crm_lead import CrmLead
+from odoo.exceptions import UserError
 class Property(models.Model):
     _name = 'real_estate.property'
     _description = 'Real Estate Property'
@@ -55,3 +56,12 @@ class Property(models.Model):
         for record in self:
             if record.available:
              record.write({'property_type': 'villa'})
+
+    def write(self, vals):
+        for record in self:
+            available = vals.get('available', record.available)
+            if 'bedrooms' in vals and not available:
+                raise UserError(
+                    "You cannot edit the  bedrooms "
+                )
+        return super(Property, self).write(vals)

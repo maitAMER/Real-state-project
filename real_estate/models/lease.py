@@ -41,3 +41,9 @@ class Lease(models.Model):
         for record in self:
             record.write({'state': 'draft'})
     
+    @api.model
+    def create(self, vals):
+        """Override create to generate lease reference"""
+        # if vals.get('name', 'New') == 'New':
+        vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.lease')
+        return super(Lease, self).create(vals)

@@ -33,6 +33,7 @@
     'depends': ['crm'],
     'data': [
         'data/sequence_opportunity_crm_data.xml',
+        'data/ir_sequence_data.xml',
         'views/res_config_settings_views.xml',
         'views/crm_lead_views.xml'
     ],
