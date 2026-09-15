@@ -1,6 +1,5 @@
 from odoo import models, fields, api
 from odoo.addons.crm.populate.crm_lead import CrmLead
-from odoo.exceptions import UserError
 class Property(models.Model):
     _name = 'real_estate.property'
     _description = 'Real Estate Property'

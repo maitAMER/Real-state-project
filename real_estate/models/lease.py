@@ -40,7 +40,7 @@ class Lease(models.Model):
     def convert_to_draft(self):
         for record in self:
             record.write({'state': 'draft'})
-    
+
     @api.model
     def create(self, vals):
         """Override create to generate lease reference"""
