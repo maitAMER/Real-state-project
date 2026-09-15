@@ -9,6 +9,13 @@ class CrmLead(models.Model):
         ('villa', 'Villa'),
         ('commercial', 'Commercial'),
     ], string='Property Type', required=True)
+    monthly_rent = fields.Float(string='Monthly Rent', required=True)
+    age_category= fields.Selection([
+            ('a', '0-20'),
+            ('b', '21-40'),
+            ('c', '41-60'),
+        ], string='Age Category')
+
 
     def write_leadname_text(self):
             """Write lead name  text into the notes field"""

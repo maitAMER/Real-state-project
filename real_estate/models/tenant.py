@@ -1,4 +1,5 @@
-from odoo import models, fields, api
+# from my_adds.Real_state_project.real_estate.models import booking
+from odoo import models, fields , api
 
 class Tenant(models.Model):
     _name = 'real_estate.tenant'
@@ -37,3 +38,10 @@ class Tenant(models.Model):
                record.write({'notes': record.crm_id.email_from}) 
              else:
               record.write({'notes': record.crm_id.website})
+
+    @api.model
+    def create(self, vals):
+        """Override create to generate lease reference"""
+        # if vals.get('name', 'New') == 'New':
+        vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.tenant')
+        return super(Tenant, self).create(vals)

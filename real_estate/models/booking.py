@@ -1,4 +1,5 @@
-from odoo import models, fields
+# from my_adds.Real_state_project.real_estate.models.lease import Lease
+from odoo import models, fields , api
 
 class booking(models.Model):
     _name = 'real_estate.booking'
@@ -32,4 +33,12 @@ class booking(models.Model):
     def convert_to_cancelled(self):
         for record in self:
             record.write({'state': 'cancelled'})
+
+
+    @api.model
+    def create(self, vals):
+        """Override create to generate lease reference"""
+        # if vals.get('name', 'New') == 'New':
+        vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.booking')
+        return super(booking, self).create(vals)
     

@@ -1,5 +1,5 @@
 from odoo import models, fields, api
-
+from odoo.exceptions import UserError
 class Lease(models.Model):
     _name = 'real_estate.lease'
     _description = 'Property Lease Agreement'
@@ -40,6 +40,9 @@ class Lease(models.Model):
     def convert_to_draft(self):
         for record in self:
             record.write({'state': 'draft'})
+
+    def unlink(self):
+        raise UserError("You cannot delete a lease.")
 
     @api.model
     def create(self, vals):
