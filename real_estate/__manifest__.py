@@ -29,6 +29,7 @@ Long description of module's purpose
         'views/tenant.xml',
         'views/lease_view.xml',
         'views/booking.xml',
+        'views/crm_lead_view.xml',
         'views/menu.xml',
 
     ],
