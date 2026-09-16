@@ -15,6 +15,17 @@ class Tenant(models.Model):
     date_joined = fields.Date(string='Date Joined', default=fields.Date.today, readonly=True)
     date_of_birth = fields.Date(string='Date of Birth')
     notes = fields.Text(string='Notes')
+    user_id = fields.Many2one('res.users', string='Related User', index=True)
+    
+    
+    # user_id = fields.Many2one(
+    #     'res.users',
+    #     string='Related User',
+    #     index=True,
+    #     default=lambda self: self.env.user,
+    # )
+
+
     active = fields.Boolean(string='Active', default=True)
     crm_id=fields.Many2one('crm.lead', string='CRM Lead')
     age_category= fields.Selection([

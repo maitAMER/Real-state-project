@@ -100,14 +100,14 @@
         <form string="Property">
         <header>
          <!---Mark as occupied button-->
-        <button name="mark_as_occupied" string="Mark as Occupied" type="object" invisible="not available" class="oe_highlight"/>
+        <button name="mark_as_occupied" groups="real_estate.group_property_manager" string="Mark as Occupied" type="object" invisible="not available" class="oe_highlight"/>
         <button name="mark_as_available" string="Mark as Available" type="object" invisible=" available" class="oe_highlight"/>
          <!---Description button-->
         <button name="write_description_text" string="Write Description" type="object" class="btn-primary"/>
         <button name="write_agent_name_to_description" string="Add Agent Name to Description" type="object" class="btn-primary"/>
         <button name="Increase_deposit" string="Increase Deposit" type="object" class="btn-primary"/>
         <!---Add Bedrooms button-->
-        <button name="add_bedrooms" string="Add Bedrooms" type="object" invisible="not available" class="btn-primary"/>
+        <button name="add_bedrooms"  string="Add Bedrooms" type="object" invisible="not available" class="btn-primary"/>
         <field name="available" invisible="1"/>                   
         </header>
 

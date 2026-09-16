@@ -39,6 +39,8 @@
                             <field name="mobile"/>
                             <field name="city"/>
                             <field name="age_category"/>
+                            <field name="user_id"/>
+
                         </group>
 
                         <group string="Additional Information">
@@ -46,8 +48,8 @@
                             <field name="date_of_birth"/>
                             <field name="active"/>
                             <field name="crm_id"/>
-
-
+                    
+ 
                         </group>
                     </group>
 
