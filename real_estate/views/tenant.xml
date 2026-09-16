@@ -22,8 +22,8 @@
         <field name="arch" type="xml">
             <form string="Tenant">
                 <header>
-                    <button name="set_name_in_notes" string="Add Name to Notes" type="object" class="btn-primary"/>
-                    <button name="add_crm_lead_name_to_notes" string="Add CRM Lead Name to Notes" type="object" class="btn-primary"/>
+                    <button name="set_name_in_notes" string="Add Name to Notes"  groups="real_estate.group_tenant" type="object" class="btn-primary"/>
+                    <button name="add_crm_lead_name_to_notes"  groups="real_estate.group_tenant_manager" string="Add CRM Lead Name to Notes" type="object" class="btn-primary"/>
                 </header>
                 <sheet>
                     <div class="oe_title">

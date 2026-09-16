@@ -109,6 +109,8 @@
                         <field name="monthly_rent"/>
                         <field name="deposit_paid"/>
                         <field name="booking_id"/>
+                         <field name="user_id"/>
+
 
                     </group>
                 </sheet>

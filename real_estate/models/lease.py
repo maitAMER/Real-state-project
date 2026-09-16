@@ -24,6 +24,7 @@ class Lease(models.Model):
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
     deposit_paid = fields.Float(string='Deposit Paid')
     booking_id = fields.Many2one('real_estate.booking', string='Booking Reference')
+    user_id = fields.Many2one('res.users', string='Related User', index=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('active', 'Active'),
@@ -33,6 +34,9 @@ class Lease(models.Model):
     ], string='Status', default='draft', required=True)
 
     def convert_to_active(self):
+        if not self.env.user.has_group('real_estate.group_property_manager'):
+            raise UserError("You do not have permission to activate a lease.")
+
         for record in self:
             record.write({'state': 'active'})
 
@@ -42,7 +46,9 @@ class Lease(models.Model):
             record.write({'state': 'draft'})
 
     def unlink(self):
-        raise UserError("You cannot delete a lease.")
+        if not self.env.user.has_group('real_estate.group_property_manager'):
+            raise UserError("Only Property Managers can delete a lease.")
+        return super().unlink()
 
     @api.model
     def create(self, vals):
@@ -50,3 +56,13 @@ class Lease(models.Model):
         # if vals.get('name', 'New') == 'New':
         vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.lease')
         return super(Lease, self).create(vals)
+
+
+    def write(self, vals):
+      if not self.env.user.has_group('real_estate.group_lease_manager'):
+            raise UserError("You do not have permission to create a lease.")
+      return super(Lease, self).write(vals)
+
+    
+
+            

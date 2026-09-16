@@ -19,7 +19,7 @@
               sequence="10"/>
 
               <menuitem id="menu_lease"
-              name="lease"
+              name="Leases"
               parent="menu_real_estate_root"
               action="action_lease"
               sequence="10"/>
