@@ -5,7 +5,7 @@
         <field name="name">real_estate.property.tree</field>
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
-        <tree string="Properties" decoration-info="property_type == 'apartment'" decoration-warning="property_type == 'villa'">
+        <tree multi_edit="1" string="Properties" decoration-info="property_type == 'apartment'" decoration-warning="property_type == 'villa'">
         <field name="create_date"/>
          <field name="create_uid"/>
         <field name="name"/>

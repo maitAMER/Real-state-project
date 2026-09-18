@@ -18,6 +18,9 @@ class Property(models.Model):
         ('commercial', 'Commercial')
     ], string='Property Type', required=True)
     deposit = fields.Float(string='Deposit', required=True)
+
+    _sql_constraints = [
+        ('name_unique', 'unique(name)', 'Property name must be unique.')]
     
     def mark_as_occupied(self):
         """Mark property as no longer available"""
@@ -74,3 +77,11 @@ class Property(models.Model):
             # if vals.get('name', 'New') == 'New':
             vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.property')
             return super(Property, self).create(vals)
+
+
+    # @api.model
+    # def check_bedrooms_greater_zero(self):
+    #     """Check if bedrooms is greater than 0"""
+    #     for record in self:
+    #         if record.bedrooms <= 0:
+    #             raise UserError("Bedrooms must be greater than 0.")

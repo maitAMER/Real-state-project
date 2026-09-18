@@ -9,6 +9,7 @@ class booking(models.Model):
     agent_id = fields.Many2one('res.users', string='sales person')
     property_id = fields.Many2one('real_estate.property', string='Property', required=True)
     booking_date = fields.Datetime(string='Inspection/Booking Date', required=True, default=fields.Datetime.now)
+    user_id = fields.Many2one('res.users', string='Related User', index=True)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),

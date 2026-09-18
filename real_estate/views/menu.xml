@@ -29,4 +29,5 @@
               parent="menu_real_estate_root"
               action="action_booking"
               sequence="15"/>
+             <!-- groups="real_estate.group_booking_user" -->
 </odoo>
