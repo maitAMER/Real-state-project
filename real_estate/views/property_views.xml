@@ -135,7 +135,7 @@
         <field name="agent_id"/>
 
        <field name="bedrooms" readonly="0"/>
-       <field name="create_date"/>
+<field name="create_date" readonly="1"/>
        <field name="create_uid"/>
 
 

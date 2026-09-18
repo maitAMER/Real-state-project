@@ -7,8 +7,8 @@ class Property(models.Model):
 
     name = fields.Char(string='Property Name', required=True, index=True)
     description = fields.Text(string='Description', default='Description')
-    price = fields.Float(string='Monthly Rent', required=True)    
-    bedrooms = fields.Integer(string='Bedrooms', required=True)
+    price = fields.Float(string='Monthly Rent', required=True) 
+    bedrooms = fields.Integer(string='Bedrooms')   
     available = fields.Boolean(string='Available', default=True, index=True)    
     agent_id = fields.Many2one('res.users', string='sales person')
     property_type = fields.Selection([
@@ -16,8 +16,9 @@ class Property(models.Model):
         ('house', 'House'),
         ('villa', 'Villa'),
         ('commercial', 'Commercial')
-    ], string='Property Type', required=True)
-    deposit = fields.Float(string='Deposit', required=True)
+    ], string='Property Type')
+    deposit = fields.Float(string='Deposit')
+    lease_ids = fields.One2many('real_estate.lease', 'property_id', string="Leases")
 
     _sql_constraints = [
         ('name_unique', 'unique(name)', 'Property name must be unique.')]
