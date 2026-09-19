@@ -17,7 +17,20 @@ class Tenant(models.Model):
     notes = fields.Text(string='Notes')
     # user_id = fields.Many2one('res.users', string='Related User', index=True)
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
+
+    # class Tenant(models.Model):
+    #  _name = 'real_estate.tenant'
+
+    # phone = fields.Integer(string='Phone Number')
+    # mobile = fields.Float(string='Mobile Number')
     
+
+
+    # class Booking(models.Model):
+    #  _name = 'real_estate.tenant.booking'
+
+    # phone = fields.Integer(string='Age')
+    # mobile = fields.Float(string='mobile')
     
     # user_id = fields.Many2one(
     #     'res.users',

@@ -10,6 +10,7 @@ class booking(models.Model):
     property_id = fields.Many2one('real_estate.property', string='Property', required=True)
     booking_date = fields.Datetime(string='Inspection/Booking Date', required=True, default=fields.Datetime.now)
     user_id = fields.Many2one('res.users', string='Related User', index=True)
+    # user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
     state = fields.Selection([
         ('draft', 'Draft'),
         ('confirmed', 'Confirmed'),
@@ -17,6 +18,7 @@ class booking(models.Model):
         ('cancelled', 'Cancelled')
     ], string='Status', default='draft', tracking=True)
     notes = fields.Text(string='Notes')
+
 
 
     def convert_to_draft(self):

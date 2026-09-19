@@ -19,6 +19,11 @@ class Lease(models.Model):
         ondelete='cascade',
         index=True
     )
+    maintenance_request_ids = fields.One2many(
+    'maintenance.request', 
+    'lease_id', 
+    string='Maintenance Requests'
+)
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
@@ -63,6 +68,19 @@ class Lease(models.Model):
             raise UserError("You do not have permission to create a lease.")
       return super(Lease, self).write(vals)
 
-    
+    # def action_open_maintenance_wizard(self):
+    #     self.ensure_one()
+    #     return {
+    #         'type': 'ir.actions.act_window',
+    #         'name': 'Maintenance Request',
+    #         'res_model': 'maintenance.request.wizard',
+    #         'view_mode': 'form',
+    #         'target': 'new',
+    #         'view_id': self.env.ref('real_estate.view_maintenance_request_wizard_form').id,
+    #         'context': {
+    #             'default_lease_id': self.id,
+    #             'default_property_id': self.property_id.id,
+    #         },
+    #     }
 
-            
+    

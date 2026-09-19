@@ -23,7 +23,8 @@ Long description of module's purpose
     # always loaded
     'data': [
         'security/category_security.xml',
-        'security/property_security.xml',          'security/ir.model.access.csv',
+        'security/property_security.xml',    
+        'security/ir.model.access.csv',
         'data/ir_sequence_data.xml',
         'views/views.xml',
         'views/templates.xml',
@@ -31,6 +32,8 @@ Long description of module's purpose
         'views/tenant.xml',
         'views/lease_view.xml',
         'views/booking.xml',
+        'views/maintenance_view.xml',
+        'wizard/maintenance.xml',
         'views/crm_lead_view.xml',
         'views/menu.xml',
 

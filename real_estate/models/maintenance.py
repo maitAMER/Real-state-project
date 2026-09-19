@@ -3,12 +3,25 @@ from odoo import models, fields, api
 class MaintenanceRequest(models.Model):
     _name = 'maintenance.request'
     _description = 'Property Maintenance Request'
-    
-    name = fields.Char()
-    lease_id = fields.Many2one('real_estate.lease')
-    #tenant_id = fields.Many2one(related='lease_id.tenant_id',ٍ store=True)
-    #property_id = fields.Many2one(related='lease_id.property_id', store=True)
-    
+
+    name = fields.Char(string='Request Reference')
+    lease_id = fields.Many2one('real_estate.lease', string='Lease')
+    property_id = fields.Many2one(
+        'real_estate.property',
+        related='lease_id.property_id',
+        store=True,
+        readonly=True,
+        string='Property'
+    )
+    tenant_phone = fields.Char(string='Tenant Phone')
+    preferred_date = fields.Date(string='Preferred Date')
+    state = fields.Selection([
+        ('submitted', 'Submitted'),
+        ('in_progress', 'In Progress'),
+        ('done', 'Done'),
+        ('cancelled', 'Cancelled'),
+    ], default='submitted', required=True, tracking=True)
+
     issue_type = fields.Selection([
         ('plumbing', 'Plumbing'),
         ('electrical', 'Electrical'),
@@ -18,7 +31,7 @@ class MaintenanceRequest(models.Model):
     ], required=True)
     description = fields.Text(required=True, tracking=True)
     urgency = fields.Selection([
-        ('low', 'Loٍw'),
+        ('low', 'Low'),
         ('medium', 'Medium'),
         ('high', 'High'),
         ('emergency', 'Emergency')

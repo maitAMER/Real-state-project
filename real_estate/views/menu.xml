@@ -29,5 +29,11 @@
               parent="menu_real_estate_root"
               action="action_booking"
               sequence="15"/>
+
+    <menuitem id="menu_maintenance_request"
+              name="Maintenance "
+              parent="menu_real_estate_root"
+              action="action_maintenance_request"
+              sequence="20"/>
              <!-- groups="real_estate.group_booking_user" -->
 </odoo>

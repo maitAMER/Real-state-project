@@ -96,11 +96,12 @@
         <field name="model">real_estate.lease</field>
         <field name="arch" type="xml">
             <form string="Lease">
-            <header>
-            <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
-            <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
-            <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
-            </header>
+                <header>
+                    <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
+                    <button type="action" name="real_estate.action_maintenance_request_wizard" string="Maintenance Request" class="oe_highlight" context="{'default_lease_id': active_id}" invisible="state != 'active'"/>
+                    <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
+                </header>
                 <sheet>
                     <group>
                         <field name="name"/>
@@ -111,10 +112,20 @@
                         <field name="monthly_rent"/>
                         <field name="deposit_paid"/>
                         <field name="booking_id"/>
-                         <field name="user_id"/>
-
-
+                        <field name="user_id"/>
                     </group>
+                    <notebook>
+                        <page string="Maintenance Requests">
+                            <field name="maintenance_request_ids" readonly="1">
+                                <tree>
+                                    <field name="issue_type"/>
+                                    <field name="urgency"/>
+                                    <field name="preferred_date"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
