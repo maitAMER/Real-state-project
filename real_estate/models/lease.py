@@ -24,6 +24,11 @@ class Lease(models.Model):
         'lease_id',
         string='Maintenance Requests'
     )
+    maintenance_request_count = fields.Integer(
+        string='Maintenance Requests Count',
+        compute='_compute_maintenance_request_count',
+        store=False,
+    ) 
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
@@ -37,6 +42,11 @@ class Lease(models.Model):
         ('expired', 'Expired'),
         ('cancelled', 'Cancelled'),
     ], string='Status', default='draft', required=True)
+
+    @api.depends('maintenance_request_ids')
+    def _compute_maintenance_request_count(self):
+        for record in self:
+            record.maintenance_request_count = len(record.maintenance_request_ids)
 
     def convert_to_active(self):
         if not self.env.user.has_group('real_estate.group_property_manager'):
@@ -67,6 +77,41 @@ class Lease(models.Model):
       if not self.env.user.has_group('real_estate.group_lease_manager'):
             raise UserError("You do not have permission to create a lease.")
       return super(Lease, self).write(vals)
+
+
+    def action_maintenance_requests(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Maintenance Requests',
+            'res_model': 'real_estate.maintenance_request',
+            'view_mode': 'tree,form',
+            'domain': [('lease_id', '=', self.id)],
+            'context': {
+                'default_lease_id': self.id,
+                'default_property_id': self.property_id.id,
+            },
+        }
+
+    def action_create_maintenance_request(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Create Maintenance Request',
+            'res_model': 'maintenance.request.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'view_id': self.env.ref('real_estate.view_maintenance_request_wizard_form').id,
+            'context': {
+                'default_lease_id': self.id,
+                'default_property_id': self.property_id.id,
+            },
+        }
+    
+
+
+
+
 
     # def action_open_maintenance_wizard(self):
     #     self.ensure_one()

@@ -23,6 +23,19 @@ class Tenant(models.Model):
         'tenant_id',
         string='Leases'
     )
+    lease_ids = fields.One2many(
+        'real_estate.lease', 
+        'property_id',          
+        string="Leases"
+    )
+        
+    lease_count = fields.Integer(
+            string='Lease Count',
+            compute='_compute_lease_count',
+            store=False,
+        )
+        
+    
     # class Tenant(models.Model):
     #  _name = 'real_estate.tenant'
 
@@ -69,9 +82,30 @@ class Tenant(models.Model):
              else:
               record.write({'notes': record.crm_id.website})
 
+    @api.depends('lease_ids')
+    def _compute_lease_count(self):
+        for record in self:
+            record.lease_count = len(record.lease_ids)
+
+    def action_lease(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Leases',
+            'res_model': 'real_estate.lease',
+            'view_mode': 'tree,form',
+            'domain': [('property_id', '=', self.id)],
+            'context': {
+                'default_property_id': self.id,
+            },
+        }
+
+
     @api.model
     def create(self, vals):
         """Generate a tenant sequence only when no name is provided."""
         if not vals.get('name'):
             vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.tenant')
         return super(Tenant, self).create(vals)
+
+

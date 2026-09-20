@@ -39,6 +39,7 @@ class MaintenanceRequestWizard(models.TransientModel):
             'urgency': self.urgency,
             'preferred_date': self.preferred_date,
             'tenant_phone': self.tenant_phone,
+            'assigned_to': self.env.user.id,
             'state': 'submitted',
         })
         

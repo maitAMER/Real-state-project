@@ -98,11 +98,16 @@
             <form string="Lease">
                 <header>
                     <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
-                    <button type="action" name="real_estate.action_maintenance_request_wizard" string="Maintenance Request" class="oe_highlight" context="{'default_lease_id': active_id}"/>
+                    <button name="action_create_maintenance_request" type="object" string="Create Request" class="oe_highlight"/>
                     <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
                 </header>
                 <sheet>
+                  <div name="button_box" class="oe_button_box">
+                    <button name="action_maintenance_requests" type="object" class="oe_stat_button" icon="fa-wrench">
+                        <field name="maintenance_request_count" widget="statinfo" string="Maintenance Requests"/>
+                    </button>
+                  </div>
                     <group>
                         <field name="name"/>
                         <field name="property_id"/>

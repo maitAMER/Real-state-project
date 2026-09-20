@@ -26,6 +26,14 @@ class Property(models.Model):
     'property_id',          
     string="Leases"
 )
+    
+    lease_count = fields.Integer(
+        string='Lease Count',
+        compute='_compute_lease_count',
+        store=False,
+    )
+    
+
     _sql_constraints = [
         ('name_unique', 'unique(name)', 'Property name must be unique.')]
     
@@ -77,6 +85,23 @@ class Property(models.Model):
         return super(Property, self).write(vals)
     
 
+    @api.depends('lease_ids')
+    def _compute_lease_count(self):
+        for record in self:
+            record.lease_count = len(record.lease_ids)
+
+    def action_lease(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Leases',
+            'res_model': 'real_estate.lease',
+            'view_mode': 'tree,form',
+            'domain': [('property_id', '=', self.id)],
+            'context': {
+                'default_property_id': self.id,
+            },
+        }
 
     @api.model
     def create(self, vals):

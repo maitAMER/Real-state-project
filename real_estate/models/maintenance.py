@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class MaintenanceRequest(models.Model):
     _name = 'real_estate.maintenance_request'
@@ -40,3 +40,9 @@ class MaintenanceRequest(models.Model):
     scheduled_date = fields.Date()
     completion_date = fields.Date()
     actual_cost = fields.Float()
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('assigned_to'):
+            vals['assigned_to'] = self.env.user.id
+        return super().create(vals)
