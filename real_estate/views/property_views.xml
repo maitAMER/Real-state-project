@@ -142,6 +142,9 @@
         </group>
         </group>
         
+
+
+        
         <notebook>
             <!-- تمت إضافة تبويب Leases هنا -->
             <page string="Leases">

@@ -15,9 +15,14 @@ class Tenant(models.Model):
     date_joined = fields.Date(string='Date Joined', default=fields.Date.today, readonly=True)
     date_of_birth = fields.Date(string='Date of Birth')
     notes = fields.Text(string='Notes')
+    description = fields.Text(string='Description')
     # user_id = fields.Many2one('res.users', string='Related User', index=True)
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
-
+    lease_ids = fields.One2many(
+        'real_estate.lease',
+        'tenant_id',
+        string='Leases'
+    )
     # class Tenant(models.Model):
     #  _name = 'real_estate.tenant'
 

@@ -18,6 +18,9 @@ class Property(models.Model):
         ('commercial', 'Commercial')
     ], string='Property Type')
     deposit = fields.Float(string='Deposit')
+
+
+
     lease_ids = fields.One2many(
     'real_estate.lease', 
     'property_id',          
