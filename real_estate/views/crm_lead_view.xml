@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
         <header position="inside">
         <button name="write_leadname_text" type="object" string="Write Lead Name" class="oe_highlight"/>
+        <button type="action" name="real_estate.action_real_estate_tenant_wizard" string="Create Tenant" class="btn-primary" context="{'default_name': name, 'default_name': contact_name or name, 'default_phone': phone, 'default_mobile': mobile, 'default_email': email_from}"/>
         </header>
             <xpath expr="//field[@name='user_id']" position="before">
                 <field name="property_type"/>

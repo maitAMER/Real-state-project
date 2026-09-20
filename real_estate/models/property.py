@@ -18,8 +18,11 @@ class Property(models.Model):
         ('commercial', 'Commercial')
     ], string='Property Type')
     deposit = fields.Float(string='Deposit')
-    lease_ids = fields.One2many('real_estate.lease', 'property_id', string="Leases")
-
+    lease_ids = fields.One2many(
+    'real_estate.lease', 
+    'property_id',          
+    string="Leases"
+)
     _sql_constraints = [
         ('name_unique', 'unique(name)', 'Property name must be unique.')]
     

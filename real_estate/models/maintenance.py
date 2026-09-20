@@ -1,7 +1,7 @@
-from odoo import models, fields, api
+from odoo import models, fields
 
 class MaintenanceRequest(models.Model):
-    _name = 'maintenance.request'
+    _name = 'real_estate.maintenance_request'
     _description = 'Property Maintenance Request'
 
     name = fields.Char(string='Request Reference')
@@ -20,7 +20,7 @@ class MaintenanceRequest(models.Model):
         ('in_progress', 'In Progress'),
         ('done', 'Done'),
         ('cancelled', 'Cancelled'),
-    ], default='submitted', required=True, tracking=True)
+    ], default='submitted', required=True)
 
     issue_type = fields.Selection([
         ('plumbing', 'Plumbing'),
@@ -29,7 +29,7 @@ class MaintenanceRequest(models.Model):
         ('appliance', 'Appliance'),
         ('other', 'Other')
     ], required=True)
-    description = fields.Text(required=True, tracking=True)
+    description = fields.Text(required=True)
     urgency = fields.Selection([
         ('low', 'Low'),
         ('medium', 'Medium'),
@@ -40,4 +40,3 @@ class MaintenanceRequest(models.Model):
     scheduled_date = fields.Date()
     completion_date = fields.Date()
     actual_cost = fields.Float()
-    

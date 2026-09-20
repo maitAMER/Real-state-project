@@ -98,7 +98,7 @@
             <form string="Lease">
                 <header>
                     <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
-                    <button type="action" name="real_estate.action_maintenance_request_wizard" string="Maintenance Request" class="oe_highlight" context="{'default_lease_id': active_id}" invisible="state != 'active'"/>
+                    <button type="action" name="real_estate.action_maintenance_request_wizard" string="Maintenance Request" class="oe_highlight" context="{'default_lease_id': active_id}"/>
                     <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
                 </header>

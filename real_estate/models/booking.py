@@ -37,6 +37,15 @@ class booking(models.Model):
         for record in self:
             record.write({'state': 'cancelled'})
 
+    def action_create_lease(self):
+        self.ensure_one()
+        self.write({'state': 'converted'})
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'real_estate.lease',
+            'view_mode': 'form',
+            'target': 'current',
+        }
 
     @api.model
     def create(self, vals):

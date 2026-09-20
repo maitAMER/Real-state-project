@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_real_estate_booking_wizard_form" model="ir.ui.view">
+        <field name="name">real_estate.booking.wizard.form</field>
+        <field name="model">real_estate.booking.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Booking Wizard">
+                <header>
+                    <button name="action_create_lease" string="Convert to Lease" type="object" class="oe_highlight" invisible="state == 'converted'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,converted,cancelled"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="agent_id"/>
+                        </group>
+                        <group>
+                            <field name="booking_date"/>
+                            <field name="user_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_real_estate_booking_wizard" model="ir.actions.act_window">
+        <field name="name">Booking Wizard</field>
+        <field name="res_model">real_estate.booking.wizard</field>
+        <field name="view_mode">tree,form</field>
+        <field name="target">current</field>
+    </record>
+</odoo>

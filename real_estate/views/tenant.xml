@@ -47,7 +47,7 @@
                             <field name="date_joined"/>
                             <field name="date_of_birth"/>
                             <field name="active"/>
-                            <field name="crm_id"/>
+                            <field name="crm_id" readonly="1"/>
                     
  
                         </group>

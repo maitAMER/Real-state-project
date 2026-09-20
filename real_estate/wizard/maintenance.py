@@ -30,8 +30,8 @@ class MaintenanceRequestWizard(models.TransientModel):
         """Create maintenance request and notify manager"""
         self.ensure_one()
         
-        # 1. Create maintenance.request record
-        maintenance_request = self.env['maintenance.request'].create({
+        # 1. Create maintenance request record
+        maintenance_request = self.env['real_estate.maintenance_request'].create({
             'property_id': self.property_id.id,
             'lease_id': self.lease_id.id,
             'issue_type': self.issue_type,

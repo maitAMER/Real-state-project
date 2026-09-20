@@ -99,16 +99,14 @@
         <field name="arch" type="xml">
         <form string="Property">
         <header>
-         <!---Mark as occupied button-->
-        <button name="mark_as_occupied" groups="real_estate.group_property_manager" string="Mark as Occupied" type="object" invisible="not available" class="oe_highlight"/>
-        <button name="mark_as_available" string="Mark as Available" type="object" invisible=" available" class="oe_highlight"/>
-         <!---Description button-->
+        <button name="mark_as_occupied" groups="real_estate.group_property_manager" string="Mark as Occupied" type="object" class="oe_highlight"/>
+        <button name="mark_as_available" string="Mark as Available" type="object" class="oe_highlight"/>
         <button name="write_description_text" string="Write Description" type="object" class="btn-primary"/>
         <button name="write_agent_name_to_description" string="Add Agent Name to Description" type="object" class="btn-primary"/>
         <button name="Increase_deposit" string="Increase Deposit" type="object" class="btn-primary"/>
-        <!---Add Bedrooms button-->
-        <button name="add_bedrooms"  string="Add Bedrooms" type="object" invisible="not available" class="btn-primary"/>
-        <field name="available" invisible="1"/>                   
+        <button type="action" name="real_estate.action_real_estate_lease_wizard" string="Create Lease" class="oe_highlight" context="{'default_property_id': active_id}"/>
+        <button name="add_bedrooms" string="Add Bedrooms" type="object" class="btn-primary"/>
+        <field name="available" invisible="1"/>
         </header>
 
 
@@ -124,7 +122,7 @@
         <field name="available"/>
         </group>
         <group>
-        <field name="price" invisible="not available"/>
+        <field name="price"/>
         <field name="deposit" string="depositamount"/>
 
         </group>
@@ -143,10 +141,25 @@
                             
         </group>
         </group>
+        
         <notebook>
-        <page string="Description">
-        <field name="description" placeholder="Description"/>
-        </page>
+            <!-- تمت إضافة تبويب Leases هنا -->
+            <page string="Leases">
+                <field name="lease_ids">
+                    <tree>
+                        <field name="name"/>
+                        <field name="tenant_id"/>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="monthly_rent"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
+            </page>
+
+            <page string="Description">
+                <field name="description" placeholder="Description"/>
+            </page>
         </notebook>
                 </sheet>
             </form>

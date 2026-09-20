@@ -16,8 +16,25 @@ class CrmLead(models.Model):
             ('c', '41-60'),
         ], string='Age Category')
 
-
     def write_leadname_text(self):
             """Write lead name  text into the notes field"""
             for record in self:
                 record.write({'description': record.name})
+
+    def action_open_hycall_wizard(self):
+        self.ensure_one()
+        return {
+            'name': 'HyCall Wizard',
+            'type': 'ir.actions.act_window',
+            'res_model': 'real_estate.tenant.wizard',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_lead_id': self.id,
+                'default_name': self.contact_name or self.name,
+                'default_phone': self.phone,
+                'default_mobile': self.mobile,
+                'default_email': self.email_from,
+            },
+        }
+                

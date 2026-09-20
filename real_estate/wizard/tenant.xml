@@ -1,0 +1,28 @@
+<odoo>
+    <record id="view_real_estate_tenant_wizard_form" model="ir.ui.view">
+        <field name="name">real_estate.tenant.wizard.form</field>
+        <field name="model">real_estate.tenant.wizard</field>
+        <field name="arch" type="xml">
+            <form string="HyCall">
+                <group>
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="mobile"/>
+                    <field name="email"/>
+                    <field name="lead_id" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_create_tenant" type="object" string="Create Tenant" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_real_estate_tenant_wizard" model="ir.actions.act_window">
+        <field name="name">Tenant Wizard</field>
+        <field name="res_model">real_estate.tenant.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

@@ -20,10 +20,10 @@ class Lease(models.Model):
         index=True
     )
     maintenance_request_ids = fields.One2many(
-    'maintenance.request', 
-    'lease_id', 
-    string='Maintenance Requests'
-)
+        'real_estate.maintenance_request',
+        'lease_id',
+        string='Maintenance Requests'
+    )
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     monthly_rent = fields.Float(string='Monthly Rent', required=True)

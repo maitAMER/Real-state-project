@@ -8,7 +8,7 @@ class Tenant(models.Model):
     
     # === CORE FIELDS ===
     name = fields.Char(string='Tenant Name', required=True, index=True)
-    email = fields.Char(string='Email', required=True, index=True)
+    email = fields.Char(string='Email', index=True)
     phone = fields.Char(string='Phone Number')
     mobile = fields.Char(string='Mobile Number')
     city = fields.Char(string='City')
@@ -66,7 +66,7 @@ class Tenant(models.Model):
 
     @api.model
     def create(self, vals):
-        """Override create to generate lease reference"""
-        # if vals.get('name', 'New') == 'New':
-        vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.tenant')
+        """Generate a tenant sequence only when no name is provided."""
+        if not vals.get('name'):
+            vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.tenant')
         return super(Tenant, self).create(vals)

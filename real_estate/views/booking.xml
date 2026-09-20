@@ -78,6 +78,7 @@
             <form string="Booking">
             <header>
             <button name="convert_to_draft" type="object" string="Mark to Draft" class="oe_highlight" invisible="state == 'draft'"/>
+            <button name="action_create_lease" type="object" string="Convert to Lease" class="oe_highlight" invisible="state == 'converted' or state == 'cancelled'"/>
             <button name="convert_to_confirmed" type="object" string="Mark as Confirmed" class="oe_highlight" invisible="state == 'confirmed'"/>
 <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,converted,cancelled"/>
             </header>
