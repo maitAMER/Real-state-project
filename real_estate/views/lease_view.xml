@@ -99,7 +99,6 @@
                     <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
                     <button name="action_create_electrical_charge_request" type="object" string="Create Newer Charge Request" class="oe_highlight"/>
-
                 </header>
                 <sheet>
                     <div name="button_box" class="oe_button_box">
@@ -114,18 +113,15 @@
                         </h1>
                     </div>
 
+                    <!-- الصف الأول: المعلومات الأساسية (يمين) والتواريخ والمدة (شمال) -->
                     <group>
-                        <!-- العمود الأول: المعلومات الأساسية -->
                         <group string="Lease Information">
                             <field name="property_id"/>
                             <field name="tenant_id"/>
                             <field name="user_id"/>
                             <field name="booking_id"/>
-                             <field name="total_cost"/>
-
                         </group>
                         
-                        <!-- العمود الثاني: التواريخ والمدة (مع التواريخ كلها في جروب لوحدها) -->
                         <group string="Dates &amp; Timeline">
                             <field name="start_date"/>
                             <field name="end_date"/>
@@ -134,13 +130,23 @@
                         </group>
                     </group>
 
-                    <!-- قسم الأسعار والماليات -->
+                    <!-- الصف الثاني: التفاصيل المالية (يمين) وتفاصيل تكاليف الصيانة بالشكل المنظم (شمال) -->
                     <group>
                         <group string="Financial Details">
                             <field name="monthly_rent"/>
                             <field name="deposit_paid"/>
                         </group>
-                        <group>
+                        
+                        <group string="Maintenance Cost Breakdown">
+                            <field name="plumbing_cost" readonly="1"/>
+                            <field name="electrical_cost" readonly="1"/>
+                            <field name="air_condition_cost" readonly="1"/>
+                            <field name="appliance_cost" readonly="1"/>
+                            <field name="other_cost" readonly="1"/>
+                            <div class="oe_subtotal_footer_separator oe_inline" style="border-top: 2px solid #dee2e6; padding-top: 5px;">
+                                <label for="total_cost" string="Total Maintenance Cost"/>
+                            </div>
+                            <field name="total_cost" readonly="1" nolabel="1" class="oe_subtotal_footer_separator"/>
                         </group>
                     </group>
 

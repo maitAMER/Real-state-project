@@ -232,3 +232,45 @@ class Lease(models.Model):
     #             'default_property_id': self.property_id.id,
     #         },
     #     }
+
+
+
+    # حقول محسوبة لتجميع التكاليف حسب نوع الصيانة
+    plumbing_cost = fields.Float(string="Plumbing Cost", compute='_compute_maintenance_costs', store=True)
+    electrical_cost = fields.Float(string="Electrical Cost", compute='_compute_maintenance_costs', store=True)
+    air_condition_cost = fields.Float(string="Air Condition Cost", compute='_compute_maintenance_costs', store=True)
+    appliance_cost = fields.Float(string="Appliance Cost", compute='_compute_maintenance_costs', store=True)
+    other_cost = fields.Float(string="Other Cost", compute='_compute_maintenance_costs', store=True)
+    
+    total_cost = fields.Float(string="Total Cost", compute='_compute_maintenance_costs', store=True)
+
+    @api.depends('maintenance_request_ids.actual_cost', 'maintenance_request_ids.issue_type')
+    def _compute_maintenance_costs(self):
+        for lease in self:
+            plumbing = 0.0
+            electrical = 0.0
+            air_cond = 0.0
+            appliance = 0.0
+            other = 0.0
+
+            for req in lease.maintenance_request_ids:
+                cost = req.actual_cost or 0.0
+                if req.issue_type == 'plumbing':
+                    plumbing += cost
+                elif req.issue_type == 'electrical':
+                    electrical += cost
+                elif req.issue_type == 'air_condition':
+                    air_cond += cost
+                elif req.issue_type == 'appliance':
+                    appliance += cost
+                else:
+                    other += cost
+
+            lease.plumbing_cost = plumbing
+            lease.electrical_cost = electrical
+            lease.air_condition_cost = air_cond
+            lease.appliance_cost = appliance
+            lease.other_cost = other
+            
+            # المجموع الكلي لكل تكاليف الصيانة
+            lease.total_cost = plumbing + electrical + air_cond + appliance + other
