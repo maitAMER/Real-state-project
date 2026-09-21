@@ -45,6 +45,8 @@
                             <field name="city"/>
                             <field name="age_category"/>
                             <field name="user_id"/>
+                            <field name="age"/>
+
 
                         </group>
 

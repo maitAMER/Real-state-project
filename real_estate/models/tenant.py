@@ -1,6 +1,6 @@
 # from my_adds.Real_state_project.real_estate.models import booking
 from odoo import models, fields , api
-
+from datetime import date, datetime
 class Tenant(models.Model):
     _name = 'real_estate.tenant'
     _description = 'Real Estate Tenant'
@@ -18,6 +18,7 @@ class Tenant(models.Model):
     description = fields.Text(string='Description')
     # user_id = fields.Many2one('res.users', string='Related User', index=True)
     user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
+    age = fields.Integer(string='Age', compute='_compute_age', store=True)
     lease_ids = fields.One2many(
         'real_estate.lease',
         'tenant_id',
@@ -82,11 +83,13 @@ class Tenant(models.Model):
              else:
               record.write({'notes': record.crm_id.website})
 
+
+  # البحث في نموذج التينانت عن العقود المرتبطة بهذا التينانت
     @api.depends('lease_ids')
     def _compute_lease_count(self):
         for record in self:
             record.lease_count = len(record.lease_ids)
-
+# 2. دالة الانتقال عند الضغط على الزر
     def action_lease(self):
         self.ensure_one()
         return {
@@ -109,3 +112,13 @@ class Tenant(models.Model):
         return super(Tenant, self).create(vals)
 
 
+    @api.depends('date_of_birth')
+    def _compute_age(self):
+        today = fields.Date.today()
+
+        for record in self:
+            if record.date_of_birth:
+                dob = fields.Date.from_string(record.date_of_birth)
+                record.age = today.year - dob.year - ((today.month, today.day) < (dob.month, dob.day))
+            else:
+                record.age = 0

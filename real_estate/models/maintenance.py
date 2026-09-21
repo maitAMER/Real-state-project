@@ -46,3 +46,6 @@ class MaintenanceRequest(models.Model):
         if not vals.get('assigned_to'):
             vals['assigned_to'] = self.env.user.id
         return super().create(vals)
+
+
+    

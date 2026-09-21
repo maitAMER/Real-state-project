@@ -84,12 +84,14 @@ class Property(models.Model):
                 )
         return super(Property, self).write(vals)
     
-
+  # البحث في نموذج البروبيرتي عن العقود المرتبطة بهذا البروبيرتي
     @api.depends('lease_ids')
     def _compute_lease_count(self):
         for record in self:
             record.lease_count = len(record.lease_ids)
 
+
+# 2. دالة الانتقال عند الضغط على الزر
     def action_lease(self):
         self.ensure_one()
         return {
