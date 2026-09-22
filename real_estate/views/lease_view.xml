@@ -14,6 +14,8 @@
                 <field name="monthly_rent"/>
                 <field name="deposit_paid"/>
                 <field name="booking_id"/>
+                <field name="state"/>
+
             </tree>
         </field>
     </record>
@@ -100,6 +102,7 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
                     <button name="action_create_electrical_charge_request" type="object" string="Create Newer Charge Request" class="oe_highlight"/>
                 </header>
+                
                 <sheet>
                     <div name="button_box" class="oe_button_box">
                         <button name="action_maintenance_requests" type="object" class="oe_stat_button" icon="fa-wrench">
@@ -113,7 +116,7 @@
                         </h1>
                     </div>
 
-                    <!-- الصف الأول: المعلومات الأساسية (يمين) والتواريخ والمدة (شمال) -->
+                    <!-- الصف الأول: المعلومات الأساسية والتواريخ والمدة -->
                     <group>
                         <group string="Lease Information">
                             <field name="property_id"/>
@@ -130,7 +133,7 @@
                         </group>
                     </group>
 
-                    <!-- الصف الثاني: التفاصيل المالية (يمين) وتفاصيل تكاليف الصيانة بالشكل المنظم (شمال) -->
+                    <!-- الصف الثاني: التفاصيل المالية وتفاصيل تكاليف الصيانة -->
                     <group>
                         <group string="Financial Details">
                             <field name="monthly_rent"/>
@@ -143,7 +146,7 @@
                             <field name="air_condition_cost" readonly="1"/>
                             <field name="appliance_cost" readonly="1"/>
                             <field name="other_cost" readonly="1"/>
-                            <div class="oe_subtotal_footer_separator oe_inline" style="border-top: 2px solid #dee2e6; padding-top: 5px;">
+                            <div class="oe_subtotal_footer_separator oe_inline" style="border-top: 2px solid #123457; padding-top: 5px;">
                                 <label for="total_cost" string="Total Maintenance Cost"/>
                             </div>
                             <field name="total_cost" readonly="1" nolabel="1" class="oe_subtotal_footer_separator"/>
@@ -151,6 +154,7 @@
                     </group>
 
                     <notebook>
+                        <!-- صفحة طلبات الصيانة -->
                         <page string="Maintenance Requests">
                             <field name="maintenance_request_ids" readonly="1">
                                 <tree>
@@ -160,6 +164,19 @@
                                     <field name="state"/>
                                 </tree>
                             </field>
+                        </page>
+
+                        <!-- صفحة ملخص المدفوعات الجديدة -->
+                        <page string="Payment Information">
+                            <group>
+                                <group string="Payment Methods Breakdown">
+                                    <field name="total_cash_amount" readonly="1"/>
+                                    <field name="total_visa_amount" readonly="1"/>
+                                </group>
+                                <group string="Total Payments Summary">
+                                    <field name="total_payment_amount" readonly="1" class="oe_subtotal_footer_separator"/>
+                                </group>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
@@ -173,5 +190,18 @@
         <field name="res_model">real_estate.lease</field>
         <field name="view_mode">tree,kanban,form</field>
         <field name="search_view_id" ref="view_lease_search"/>
+    </record>
+
+    <!-- Scheduled Action (Cron Job) - تم نقله هنا للخارج -->
+    <record id="ir_cron_auto_expire_leases" model="ir.cron">
+        <field name="name">Real Estate: Auto Expire Leases</field>
+        <field name="model_id" ref="model_real_estate_lease"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_expire_leases()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
     </record>
 </odoo>

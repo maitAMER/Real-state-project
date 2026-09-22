@@ -1,4 +1,6 @@
 from odoo import models, fields, api
+from datetime import timedelta
+
 
 class MaintenanceRequest(models.Model):
     _name = 'real_estate.maintenance_request'
@@ -20,7 +22,7 @@ class MaintenanceRequest(models.Model):
         ('in_progress', 'In Progress'),
         ('done', 'Done'),
         ('cancelled', 'Cancelled'),
-    ], default='submitted', required=True)
+    ], default='new', string='status')
 
     issue_type = fields.Selection([
         ('plumbing', 'Plumbing'),
@@ -47,5 +49,24 @@ class MaintenanceRequest(models.Model):
             vals['assigned_to'] = self.env.user.id
         return super().create(vals)
 
+    # Automation
 
-    
+    def _cron_auto_expire_leases(self):
+        """Scheduled action - expire leases whose end date has passed"""
+        today = fields.Date.today()
+        expired_leases = self.search([
+            ('end_date', '<', today),
+        ])
+        for lease in expired_leases:
+            lease.write({'state': 'expired'})
+
+         # Automation - Scheduled Action for Emergency Requests
+    def _cron_auto_schedule_emergency(self):
+        """Scheduled action - set scheduled_date to tomorrow if urgency is emergency"""
+        tomorrow = fields.Date.today() + timedelta(days=1)
+        emergency_requests = self.search([
+            ('urgency', '=', 'emergency'),
+            ('scheduled_date', '!=', tomorrow),
+        ])
+        for req in emergency_requests:
+            req.write({'scheduled_date': tomorrow})

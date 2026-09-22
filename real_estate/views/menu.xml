@@ -30,10 +30,19 @@
               action="action_booking"
               sequence="15"/>
 
+    
+
     <menuitem id="menu_maintenance_request"
               name="Maintenance "
               parent="menu_real_estate_root"
               action="action_maintenance_request"
-              sequence="20"/>
+              sequence="15"/>
              <!-- groups="real_estate.group_booking_user" -->
+
+              <menuitem id="menu_payments"
+              name="Payments"
+              parent="menu_real_estate_root"
+              action="action_payments"
+              sequence="20"/>
+
 </odoo>

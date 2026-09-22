@@ -8,3 +8,4 @@ from . import lease
 from . import maintenance
 from . import booking
 from . import crm_lead
+from . import payments

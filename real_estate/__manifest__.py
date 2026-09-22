@@ -34,10 +34,12 @@ Long description of module's purpose
         'views/templates.xml',
         'views/property_views.xml',
         'views/tenant.xml',
+        'views/payments.xml',
         'views/lease_view.xml',
         'views/booking.xml',
         'views/maintenance_view.xml',
         'views/crm_lead_view.xml',
+        'views/payments.xml',
         'views/menu.xml',
 
     ],
@@ -46,4 +48,3 @@ Long description of module's purpose
         'demo/demo.xml',
     ],
 }
-

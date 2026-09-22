@@ -1,6 +1,7 @@
 from odoo import models, fields, api
 from odoo.exceptions import UserError, ValidationError
 from datetime import timedelta
+ 
 
 
 class Lease(models.Model):
@@ -34,10 +35,12 @@ class Lease(models.Model):
         store=False,
     )
 
-    total_cost = fields.Float(compute='_compute_total_coast', string='Total Cost')
+    total_cost = fields.Float(
+        compute='_compute_total_coast', string='Total Cost')
 
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
+    payment_ids = fields.One2many('lease.payment', 'lease_id', string='Payments')
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
     next_electrical_charge = fields.Date(
         string='Next Electrical Charge',
@@ -54,13 +57,12 @@ class Lease(models.Model):
         string='Currently Active', compute='_compute_is_active')
 
     state = fields.Selection([
-        ('draft', 'Draft'),
-        ('active', 'Active'),
-        ('at_risk', 'At Risk'),
-        ('expired', 'Expired'),
-        ('cancelled', 'Cancelled'),
-    ], string='Status', default='draft', required=True)
-
+    ('new', 'New'),  
+    ('draft', 'Draft'),
+    ('in_progress', 'In Progress'),
+    ('expired', 'Expired'),
+    ('done', 'Done'),
+], default='new', string='Status')
   # البحث في نموذج العقود عن الصيانه المرتبطة بهذا العقد
     @api.depends('maintenance_request_ids')
     def _compute_maintenance_request_count(self):
@@ -92,10 +94,10 @@ class Lease(models.Model):
             'real_estate.lease')
         return super(Lease, self).create(vals)
 
-    def write(self, vals):
-        if not self.env.user.has_group('real_estate.group_lease_manager'):
-            raise UserError("You do not have permission to create a lease.")
-        return super(Lease, self).write(vals)
+    # def write(self, vals):
+    #     if not self.env.user.has_group('real_estate.group_lease_manager'):
+    #         raise UserError("You do not have permission to create a lease.")
+    #     return super(Lease, self).write(vals)
 
     def action_maintenance_requests(self):
         self.ensure_one()
@@ -196,17 +198,15 @@ class Lease(models.Model):
             'target': 'current',
         }
 
-
-
-
-
-    total_cost = fields.Float(compute='_compute_total_cost', string='Total Cost')
+    total_cost = fields.Float(
+        compute='_compute_total_cost', string='Total Cost')
 
     @api.depends('maintenance_request_ids.actual_cost')
     def _compute_total_cost(self):
         for lease in self:
             # 1
-             lease.total_cost = sum(maintenance.actual_cost for maintenance in lease.maintenance_request_ids)
+            lease.total_cost = sum(
+                maintenance.actual_cost for maintenance in lease.maintenance_request_ids)
 
     # totalcoast = fields.Integer(
     #         compute='compute_total_coast', string='total coast')
@@ -233,16 +233,20 @@ class Lease(models.Model):
     #         },
     #     }
 
-
-
     # حقول محسوبة لتجميع التكاليف حسب نوع الصيانة
-    plumbing_cost = fields.Float(string="Plumbing Cost", compute='_compute_maintenance_costs', store=True)
-    electrical_cost = fields.Float(string="Electrical Cost", compute='_compute_maintenance_costs', store=True)
-    air_condition_cost = fields.Float(string="Air Condition Cost", compute='_compute_maintenance_costs', store=True)
-    appliance_cost = fields.Float(string="Appliance Cost", compute='_compute_maintenance_costs', store=True)
-    other_cost = fields.Float(string="Other Cost", compute='_compute_maintenance_costs', store=True)
-    
-    total_cost = fields.Float(string="Total Cost", compute='_compute_maintenance_costs', store=True)
+    plumbing_cost = fields.Float(
+        string="Plumbing Cost", compute='_compute_maintenance_costs', store=True)
+    electrical_cost = fields.Float(
+        string="Electrical Cost", compute='_compute_maintenance_costs', store=True)
+    air_condition_cost = fields.Float(
+        string="Air Condition Cost", compute='_compute_maintenance_costs', store=True)
+    appliance_cost = fields.Float(
+        string="Appliance Cost", compute='_compute_maintenance_costs', store=True)
+    other_cost = fields.Float(
+        string="Other Cost", compute='_compute_maintenance_costs', store=True)
+
+    total_cost = fields.Float(
+        string="Total Cost", compute='_compute_maintenance_costs', store=True)
 
     @api.depends('maintenance_request_ids.actual_cost', 'maintenance_request_ids.issue_type')
     def _compute_maintenance_costs(self):
@@ -271,6 +275,91 @@ class Lease(models.Model):
             lease.air_condition_cost = air_cond
             lease.appliance_cost = appliance
             lease.other_cost = other
-            
+
             # المجموع الكلي لكل تكاليف الصيانة
             lease.total_cost = plumbing + electrical + air_cond + appliance + other
+
+    payment_count = fields.Integer(
+        string='Payment Count', compute='_compute_payment_count')
+
+    def _compute_payment_count(self):
+        for lease in self:
+            lease.payment_count = self.env['lease.payment'].search_count(
+                [('lease_id', '=', lease.id)])
+
+    def action_open_payments(self):
+        self.ensure_one()
+        return {
+            'name': 'Payments',
+            'type': 'ir.actions.act_window',
+            'res_model': 'lease.payment',
+            'view_mode': 'tree,form',
+            'domain': [('lease_id', '=', self.id)],
+            'context': {'default_lease_id': self.id},
+            'target': 'current',
+        }
+
+
+
+
+#to show payments methods in notebook lease
+
+    total_cash_amount = fields.Float(
+        string='Total Cash Amount', compute='_compute_payment_information', store=True)
+    total_visa_amount = fields.Float(
+        string='Total Visa Amount', compute='_compute_payment_information', store=True)
+    total_payment_amount = fields.Float(
+        string='Total Payments', compute='_compute_payment_information', store=True)
+
+    @api.depends('payment_ids.amount', 'payment_ids.payment_method', 'payment_ids.state')
+    def _compute_payment_information(self):
+        for record in self:
+            valid_payments = record.payment_ids.filtered(
+                lambda p: p.state in ['paid', 'reconciled'])
+
+            costs = {
+                method: sum(
+                    valid_payments.filtered(
+                        lambda payment: payment.payment_method == method
+                    ).mapped('amount')
+                )
+                for method in ['cash', 'check', 'bank_transfer', 'credit_card', 'other']
+            }
+
+            record.total_cash_amount = costs['cash']
+            record.total_visa_amount = costs['credit_card']
+            record.total_payment_amount = sum(costs.values())
+
+
+
+#Automation
+    def _cron_auto_expire_leases(self):
+        """Scheduled action - expire leases whose end date has passed"""
+        today = fields.Date.today()
+        expired_leases = self.search([
+            ('end_date', '<', today),
+        ])
+        for lease in expired_leases:
+            lease.write({'state': 'expired'})
+
+
+                  # === VALIDATION ===
+    @api.constrains('start_date', 'end_date')
+    def _check_dates(self):
+      """Ensure end date is after start date"""
+      for record in self:
+        if record.start_date and record.end_date:
+            if record.end_date <= record.start_date:
+                raise ValidationError("End date must be after start date")
+             
+                #  _sql_constraints = [
+                #      ('email_unique', 'UNIQUE(email)', 'Email must be unique! This email is already registered.'),
+                #  ]
+             
+             # === VALIDATION ===
+    @api.constrains('deposit_paid', 'monthly_rent')
+    def _check_deposit_amount(self):
+        """Ensure deposit paid is less than monthly rent"""
+        for record in self:
+            if record.deposit_paid >= record.monthly_rent:
+                raise ValidationError("Validation Error: Deposit Paid must be less than the Monthly Rent!")

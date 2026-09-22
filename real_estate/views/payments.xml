@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Sequence for Lease Payment -->
+    <record id="seq_lease_payment" model="ir.sequence">
+        <field name="name">Lease Payment Sequence</field>
+        <field name="code">lease.payment</field>
+        <field name="prefix">PAY/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+    <!-- Window Action for Payments -->
+    <record id="action_payments" model="ir.actions.act_window">
+        <field name="name">Payments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lease.payment</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create the first lease payment!
+            </p>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_lease_payment_form" model="ir.ui.view">
+        <field name="name">lease.payment.form</field>
+        <field name="model">lease.payment</field>
+        <field name="arch" type="xml">
+            <form string="Lease Payment">
+                <header>
+                    <button name="action_pending" string="Set to Pending" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_paid" string="Mark as Paid" type="object" class="btn-primary" invisible="state in ['paid', 'reconciled']"/>
+                    <button name="action_reconciled" string="Reconcile" type="object" class="btn-secondary" invisible="state != 'paid'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,paid,reconciled"/>
+                </header>
+                <sheet>
+                    <!-- Smart Button Box -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_open_lease" 
+                                type="object" 
+                                class="oe_stat_button" 
+                                icon="fa-file-text-o"
+                                invisible="not lease_id">
+                            <field name="total_amount" widget="statinfo" string="Total Amount"/>
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="lease_id"/>
+                            <field name="tenant_id"/>
+                            <field name="property_id"/>
+                            <field name="due_date"/>
+                        </group>
+                        <group>
+                            <field name="amount"/>
+                            <field name="late_fee"/>
+                            <field name="total_amount"/>
+                            <field name="late_fee_applied"/>
+                            <field name="payment_date"/>
+                            <field name="payment_method"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Add internal notes here..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="view_lease_payment_tree" model="ir.ui.view">
+        <field name="name">lease.payment.tree</field>
+        <field name="model">lease.payment</field>
+        <field name="arch" type="xml">
+            <tree string="Lease Payments" decoration-info="state == 'draft'" decoration-success="state == 'paid'" decoration-muted="state == 'reconciled'">
+                <field name="name"/>
+                <field name="lease_id"/>
+                <field name="tenant_id"/>
+                <field name="property_id"/>
+                <field name="due_date"/>
+                <field name="amount" sum="Total Amount"/>
+                <field name="late_fee" sum="Total Late Fees"/>
+                <field name="total_amount" sum="Total Sum"/>
+                <field name="payment_date"/>
+                <field name="payment_method"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-warning="state == 'pending'" decoration-success="state == 'paid'" decoration-muted="state == 'reconciled'"/>
+            </tree>
+        </field>
+    </record>
+    <record id="ir_cron_auto_mark_payments_as_paid" model="ir.cron">
+        <field name="name">Real Estate: Auto Mark Payments as Paid</field>
+        <field name="model_id" ref="model_lease_payment"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_mark_payments_as_paid()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>
