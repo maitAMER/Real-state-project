@@ -47,10 +47,10 @@ class booking(models.Model):
             'target': 'current',
         }
 
-    @api.model
-    def create(self, vals):
-        """Override create to generate lease reference"""
-        # if vals.get('name', 'New') == 'New':
-        vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.booking')
-        return super(booking, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #     """Override create to generate lease reference"""
+    #     # if vals.get('name', 'New') == 'New':
+    #     vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.booking')
+    #     return super(booking, self).create(vals)
     

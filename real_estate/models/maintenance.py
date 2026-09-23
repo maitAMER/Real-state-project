@@ -18,11 +18,12 @@ class MaintenanceRequest(models.Model):
     tenant_phone = fields.Char(string='Tenant Phone')
     preferred_date = fields.Date(string='Preferred Date')
     state = fields.Selection([
-        ('submitted', 'Submitted'),
-        ('in_progress', 'In Progress'),
-        ('done', 'Done'),
-        ('cancelled', 'Cancelled'),
-    ], default='new', string='status')
+    ('new', 'New'), 
+    ('draft', 'Draft'),
+    ('in_progress', 'In Progress'),
+    ('done', 'Done'),
+    ('cancelled', 'Cancelled'),
+], default='new', string='Status')
 
     issue_type = fields.Selection([
         ('plumbing', 'Plumbing'),
@@ -42,6 +43,8 @@ class MaintenanceRequest(models.Model):
     scheduled_date = fields.Date()
     completion_date = fields.Date()
     actual_cost = fields.Float()
+    user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
+
 
     @api.model
     def create(self, vals):

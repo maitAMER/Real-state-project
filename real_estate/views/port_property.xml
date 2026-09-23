@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_properties_template" name="My Properties">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumb_seo" t-value="'My Properties'"/>
+            
+            <div class="container py-4">
+                <div class="row align-items-center mb-4">
+                    <div class="col">
+                        <h2 class="text-dark fw-bold mb-0">My Properties</h2>
+                    </div>
+                </div>
+
+                <t t-if="not properties">
+                    <div class="alert alert-info text-center py-4 shadow-sm" role="alert">
+                        <i class="fa fa-info-circle fa-2x mb-2 text-info"></i>
+                        <p class="mb-0">You do not have any properties assigned yet.</p>
+                    </div>
+                </t>
+                
+                <t t-else="">
+                    <div class="row">
+                        <t t-foreach="properties" t-as="prop">
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card border-0 shadow-sm h-100 rounded-lg overflow-hidden transition-hover">
+                                    
+                                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-light text-primary px-3 py-2 rounded-pill font-weight-bold">
+                                            <span t-field="prop.property_type"/>
+                                        </span>
+                                        <span t-if="prop.available" class="badge bg-success-light text-success px-2 py-1">Available</span>
+                                        <span t-else="" class="badge bg-danger-light text-danger px-2 py-1">Occupied</span>
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h4 class="card-title text-dark font-weight-bold mb-3">
+                                            <t t-esc="prop.name"/>
+                                        </h4>
+                                        
+                                        <div class="property-details text-muted small">
+                                            <div class="d-flex justify-content-between py-1 border-bottom">
+                                                <span><i class="fa fa-money text-primary me-2"></i> Monthly Rent:</span>
+                                                <strong class="text-dark"><span t-field="prop.price"/></strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between py-1 pt-2">
+                                                <span><i class="fa fa-bed text-primary me-2"></i> Bedrooms:</span>
+                                                <strong class="text-dark"><span t-field="prop.bedrooms"/></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-footer bg-white border-0 pb-4 pt-0">
+                                        <a href="#" class="btn btn-outline-primary btn-block w-100 rounded-pill font-weight-bold">
+                                            <i class="fa fa-eye me-1"></i> View Details
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_my_home_properties_menu" name="Portal My Home: Properties" inherit_id="portal.portal_my_home" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_service_category_enable" t-value="True"/>
+        </xpath>
+        <div id="portal_service_category" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'fa fa-building'"/>
+                <t t-set="title">Properties</t>
+                <t t-set="text">View and manage your assigned properties.</t>
+                <t t-set="url" t-value="'/my/properties'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="placeholder_count" t-value="'property_count'"/>
+            </t>
+        </div>
+    </template>
+</odoo>

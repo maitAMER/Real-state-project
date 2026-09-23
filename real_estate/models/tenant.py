@@ -20,8 +20,7 @@ class Tenant(models.Model):
     notes = fields.Text(string='Notes')
     description = fields.Text(string='Description')
     # user_id = fields.Many2one('res.users', string='Related User', index=True)
-    user_id = fields.Many2one(
-        'res.users', string='User', default=lambda self: self.env.user)
+    user_id = fields.Many2one('res.users', string='User', default=lambda self: self.env.user)
     age = fields.Integer(string='Age', compute='_compute_age', store=True)
     lease_ids = fields.One2many(
         'real_estate.lease',

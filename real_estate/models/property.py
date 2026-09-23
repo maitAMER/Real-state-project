@@ -105,12 +105,12 @@ class Property(models.Model):
             },
         }
 
-    @api.model
-    def create(self, vals):
-            """Override create to generate lease reference"""
-            # if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.property')
-            return super(Property, self).create(vals)
+    # @api.model
+    # def create(self, vals):
+    #         """Override create to generate lease reference"""
+    #         # if vals.get('name', 'New') == 'New':
+    #         vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.property')
+    #         return super(Property, self).create(vals)
 
 
     # @api.model
