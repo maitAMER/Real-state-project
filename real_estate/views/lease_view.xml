@@ -99,7 +99,7 @@
                     <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
                     <button name="action_create_maintenance_request" type="object" string="Create Request" class="oe_highlight"/>
                     <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,at_risk,expired" options="{'clickable':1}"/>
                     <button name="action_create_electrical_charge_request" type="object" string="Create Newer Charge Request" class="oe_highlight"/>
                 </header>
                 

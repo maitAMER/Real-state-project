@@ -1,5 +1,6 @@
 # from my_adds.Real_state_project.real_estate.models import booking
-from odoo import models, fields, api
+from odoo.exceptions import UserError
+from odoo import models, fields, api, Command
 from datetime import date, datetime
 
 
@@ -66,6 +67,9 @@ class Tenant(models.Model):
         ('c', '41-60'),
     ], string='Age Category')
 
+
+
+
     def set_name_in_notes(self):
         """Write the tenant name into the notes field"""
         for record in self:
@@ -128,3 +132,36 @@ class Tenant(models.Model):
         ('email_unique', 'UNIQUE(email)',
          'Email must be unique! This email is already registered.'),
     ]
+
+
+
+
+    #create_new_user_portal>>>>>>>>>>>>>
+    def action_create_portal_user(self):
+        self.ensure_one()
+        if not self.email:
+            raise UserError("Please enter an email address first to create a portal user.")
+        
+        User = self.env['res.users'].sudo()
+        user = User.search([('login', '=', self.email)], limit=1)
+
+        if not user:
+            portal_group = self.env.ref('base.group_portal')
+            user = User.create({
+                'name': self.name,
+                'login': self.email,
+                'email': self.email,
+                'groups_id': [Command.link(portal_group.id)],
+            })
+   
+        self.user_id = user.id
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Success',
+                'message': 'Portal user created and linked successfully!',
+                'type': 'success',
+                'sticky': False,
+            }
+        }

@@ -30,3 +30,16 @@ class RealEstatePortal(CustomerPortal):
             'page_name': 'property',
         })
         return request.render('real_estate.portal_my_properties_template', values)
+
+    @http.route(['/my/property/<int:property_id>'], type='http', auth="user", website=True)
+    def portal_property_detail(self, property_id, access_token=None, **kw):
+        property_record = request.env['real_estate.property'].sudo().browse(property_id)
+        
+        if not property_record.exists():
+            return request.not_found()
+            
+        values = {
+            'property_record': property_record,
+            'page_name': 'property_detail',
+        }
+        return request.render("real_estate.portal_property_page", values)

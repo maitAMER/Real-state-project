@@ -45,3 +45,16 @@ class MaintenancePortal(CustomerPortal):
             'page_name': 'maintenance',
         })
         return request.render('real_estate.portal_my_maintenance_requests', values)
+
+    @http.route(['/my/maintenance/<int:maintenance_id>'], type='http', auth="user", website=True)
+    def portal_maintenance_detail(self, maintenance_id, access_token=None, **kw):
+        maintenance_req = request.env['real_estate.maintenance_request'].sudo().browse(maintenance_id)
+        
+        if not maintenance_req.exists():
+            return request.not_found()
+            
+        values = {
+            'maintenance_req': maintenance_req,
+            'page_name': 'maintenance_detail',
+        }
+        return request.render("real_estate.portal_maintenance_page", values)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- Template: My Properties List -->
     <template id="portal_my_properties_template" name="My Properties">
         <t t-call="portal.portal_layout">
             <t t-set="breadcrumb_seo" t-value="'My Properties'"/>
@@ -50,7 +51,8 @@
                                     </div>
                                     
                                     <div class="card-footer bg-white border-0 pb-4 pt-0">
-                                        <a href="#" class="btn btn-outline-primary btn-block w-100 rounded-pill font-weight-bold">
+                                        <!-- تم تحديث الرابط هنا ليفتح صفحة تفاصيل العقار المحدد -->
+                                        <a t-att-href="'/my/property/%s' % prop.id" class="btn btn-outline-primary btn-block w-100 rounded-pill font-weight-bold">
                                             <i class="fa fa-eye me-1"></i> View Details
                                         </a>
                                     </div>
@@ -64,6 +66,67 @@
         </t>
     </template>
 
+    <!-- Template: Property Detail Page -->
+    <template id="portal_property_page" name="Property Detail">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumb_seo" t-value="'Property: ' + (property_record.name or '')"/>
+            
+            <div class="container py-4">
+                <!-- Breadcrumbs -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="/my/home">My Account</a></li>
+                        <li class="breadcrumb-item"><a href="/my/properties">My Properties</a></li>
+                        <li class="breadcrumb-item active" aria-current="page"><t t-esc="property_record.name"/></li>
+                    </ol>
+                </nav>
+
+                <!-- Property Details Card -->
+                <div class="card border-0 shadow-sm rounded-lg overflow-hidden">
+                    <div class="card-header bg-white py-4 d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0 text-dark fw-bold">
+                            <i class="fa fa-building text-primary me-2"></i> <t t-esc="property_record.name"/>
+                        </h3>
+                        <span t-if="property_record.available" class="badge bg-success-light text-success px-3 py-2">Available</span>
+                        <span t-else="" class="badge bg-danger-light text-danger px-3 py-2">Occupied</span>
+                    </div>
+                    
+                    <div class="card-body p-4">
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <strong class="text-muted d-block mb-1">Property Type:</strong>
+                                <span class="badge bg-light text-primary px-3 py-2 fs-6"><t t-esc="property_record.property_type"/></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong class="text-muted d-block mb-1">Monthly Rent:</strong>
+                                <span class="text-dark fs-5 fw-bold"><t t-esc="property_record.price"/></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 mb-3">
+                                <strong class="text-muted d-block mb-1">Bedrooms:</strong>
+                                <span class="text-dark"><t t-esc="property_record.bedrooms"/></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <strong class="text-muted d-block mb-1">Deposit:</strong>
+                                <span class="text-dark"><t t-esc="property_record.deposit"/></span>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <strong class="text-muted d-block mb-1">Description:</strong>
+                                <p class="text-dark bg-light p-3 rounded"><t t-esc="property_record.description"/></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Portal Menu Integration: Properties Card on /my/home -->
     <template id="portal_my_home_properties_menu" name="Portal My Home: Properties" inherit_id="portal.portal_my_home" priority="30">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
             <t t-set="portal_service_category_enable" t-value="True"/>

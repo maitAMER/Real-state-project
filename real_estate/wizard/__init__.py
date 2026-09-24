@@ -3,6 +3,7 @@
 from . import maintenance
 from . import lease
 from . import tenant
+from . import change_state_wizard  
 
 # Keep the booking wizard import guarded to avoid partial-module circular
 # import errors during Odoo module bootstrap.

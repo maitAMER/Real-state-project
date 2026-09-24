@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'crm'],
+    'depends': ['base', 'crm', 'portal'],
 
     # always loaded
     'data': [
@@ -30,10 +30,13 @@ Long description of module's purpose
         'wizard/maintenance.xml',
         'wizard/booking.xml',
         'wizard/tenant.xml',
+        'wizard/change_state_wizard_view.xml',
         'views/views.xml',
         'views/portal_templates.xml',
         'views/portal_templates_mentenans.xml',
         'views/port_property.xml',
+        'views/portal_payment.xml',
+        'views/portal_tenant.xml',
         'views/templates.xml',
         'views/property_views.xml',
         'views/tenant.xml',
@@ -42,10 +45,16 @@ Long description of module's purpose
         'views/booking.xml',
         'views/maintenance_view.xml',
         'views/crm_lead_view.xml',
-        'views/payments.xml',
         'views/menu.xml',
-
     ],
+
+    # Assets configuration for styling
+    'assets': {
+        'web.assets_backend': [
+            'real_estate/static/src/css/property.css',
+        ],
+    },
+
     # only loaded in demonstration mode
     'demo': [
         'demo/demo.xml',

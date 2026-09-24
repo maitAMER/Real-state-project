@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Property List View (Tree) -->
     <record id="view_property_tree" model="ir.ui.view">
         <field name="name">real_estate.property.tree</field>
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
-        <tree multi_edit="1" string="Properties" decoration-info="property_type == 'apartment'" decoration-warning="property_type == 'villa'">
+        <tree  class="property_custom" multi_edit="1" string="Properties" decoration-info="property_type == 'apartment'" decoration-warning="property_type == 'villa'">
         <field name="create_date"/>
          <field name="create_uid"/>
         <field name="name"/>
@@ -98,15 +97,27 @@
         <field name="model">real_estate.property</field>
         <field name="arch" type="xml">
         <form string="Property">
-        <header>
-        <button name="mark_as_occupied" groups="real_estate.group_property_manager" string="Mark as Occupied" type="object" class="oe_highlight"/>
-        <button name="mark_as_available" string="Mark as Available" type="object" class="oe_highlight"/>
-        <button name="write_description_text" string="Write Description" type="object" class="btn-primary"/>
-        <button name="write_agent_name_to_description" string="Add Agent Name to Description" type="object" class="btn-primary"/>
-        <button name="Increase_deposit" string="Increase Deposit" type="object" class="btn-primary"/>
-         <button name="add_bedrooms" string="Add Bedrooms" type="object" class="btn-primary"/>
-        <field name="available" invisible="1"/>
-        </header>
+  <header>
+    <!-- زرار ينقل الحالة لـ pending مثلاً -->
+    <button name="action_pending" string="Mark as Pending" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+    
+    <!-- زرار ينقل الحالة لـ sold -->
+    <button name="action_sold" string="Mark as Sold" type="object" class="oe_highlight" invisible="state == 'sold' or state == 'closed'"/>
+    
+    <!-- زرار ينقل الحالة لـ closed -->
+    <button name="action_closed" string="Close Property" type="object" class="btn-primary" invisible="state == 'closed'"/>
+
+    <!-- باقي الأزرار العادية بتاعتك -->
+    <button name="write_description_text" string="Write Description" type="object" class="btn-primary"/>
+    <button name="write_agent_name_to_description" string="Add Agent Name to Description" type="object" class="btn-primary"/>
+    <button name="Increase_deposit" string="Increase Deposit" type="object" class="btn-primary"/>
+    <button name="add_bedrooms" string="Add Bedrooms" type="object" class="btn-primary"/>
+    
+    <field name="available" invisible="1"/>
+
+    <!-- شريط الـ Status Bar -->
+    <field name="state" widget="statusbar" statusbar_visible="draft,pending,sold,closed"/>
+</header>
 
 
          <sheet>
@@ -171,6 +182,17 @@
         </notebook>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <!-- Server Action to Open Change State Wizard -->
+    <record id="property_change_state_server_action" model="ir.actions.server">
+        <field name="name">Change State</field>
+        <field name="model_id" ref="model_real_estate_property"/>
+        <field name="binding_model_id" ref="model_real_estate_property"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.action_open_change_state_wizard()
         </field>
     </record>
 </odoo>

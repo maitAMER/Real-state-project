@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-<!---Tree view-->
+    <!-- Tree view -->
     <record id="view_tenant_tree" model="ir.ui.view">
         <field name="name">real_estate.tenant.tree</field>
         <field name="model">real_estate.tenant</field>
@@ -22,15 +23,16 @@
         <field name="arch" type="xml">
             <form string="Tenant">
                 <header>
-                    <button name="set_name_in_notes" string="Add Name to Notes"  groups="real_estate.group_tenant" type="object" class="btn-primary"/>
-                    <button name="add_crm_lead_name_to_notes"  groups="real_estate.group_tenant_manager" string="Add CRM Lead Name to Notes" type="object" class="btn-primary"/>
+                    <button name="set_name_in_notes" string="Add Name to Notes" groups="real_estate.group_tenant" type="object" class="btn-primary"/>
+                    <button name="add_crm_lead_name_to_notes" groups="real_estate.group_tenant_manager" string="Add CRM Lead Name to Notes" type="object" class="btn-primary"/>
+                    <button name="action_create_portal_user" string="Create Portal User" type="object" class="btn-secondary"/>
                 </header>
                 <sheet>
-                 <div name="button_box" class="oe_button_box">
-                    <button name="action_lease" type="object" class="oe_stat_button" icon="fa-wrench">
-                        <field name="lease_count" widget="statinfo" string="lease"/>
-                    </button>
-                  </div>
+                    <div name="button_box" class="oe_button_box">
+                        <button name="action_lease" type="object" class="oe_stat_button" icon="fa-wrench">
+                            <field name="lease_count" widget="statinfo" string="Leases"/>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1>
                             <field name="name" placeholder="Tenant Name"/>
@@ -46,8 +48,6 @@
                             <field name="age_category"/>
                             <field name="user_id"/>
                             <field name="age"/>
-
-
                         </group>
 
                         <group string="Additional Information">
@@ -55,8 +55,6 @@
                             <field name="date_of_birth"/>
                             <field name="active"/>
                             <field name="crm_id" readonly="1"/>
-                    
- 
                         </group>
                     </group>
 
@@ -64,36 +62,28 @@
                         <page string="Notes">
                             <field name="notes" placeholder="Add notes about the tenant..."/>
                         </page>
+                        <page string="Leases">
+                            <field name="lease_ids">
+                                <tree create="false" delete="false">
+                                    <field name="name"/>
+                                    <field name="tenant_id"/>
+                                    <field name="start_date"/>
+                                    <field name="end_date"/>
+                                    <field name="monthly_rent"/>
+                                    <field name="state"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Description">
+                            <field name="description" placeholder="Description"/>
+                        </page>
                     </notebook>
-                    
-                 
-                 <notebook>
-                   <!-- تمت إضافة تبويب Leases هنا -->
-            <page string="Leases">
-                <field name="lease_ids">
-                    <tree create="false" delete="false">
-                        <field name="name"/>
-                        <field name="tenant_id"/>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
-                        <field name="monthly_rent"/>
-                        <field name="state"/>
-                    </tree>
-                </field>
-            </page>
-
-            <page string="Description">
-                <field name="description" placeholder="Description"/>
-            </page>
-             </notebook>  
                 </sheet>
-                
             </form>
         </field>
     </record>
 
-
- <!-- Tenant Search View -->
+    <!-- Tenant Search View -->
     <record id="view_tenant_search" model="ir.ui.view">
         <field name="name">real_estate.tenant.search</field>
         <field name="model">real_estate.tenant</field>
@@ -106,18 +96,16 @@
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
-                  <separator/>
+                <separator/>
                 <group expand="0" string="Group By">
-                    <filter string="Type" name="group_by_age_category" context="{'group_by': 'age_category'}"/>
-                    <filter string="age_category" name="group_by_city" context="{'group_by': 'city'}"/>
+                    <filter string="Age Category" name="group_by_age_category" context="{'group_by': 'age_category'}"/>
+                    <filter string="City" name="group_by_city" context="{'group_by': 'city'}"/>
                 </group>
             </search>
-            
         </field>
     </record>
 
-
-  <!-- Tenant Kanban View -->
+    <!-- Tenant Kanban View -->
     <record id="view_tenant_kanban" model="ir.ui.view">
         <field name="name">real_estate.tenant.kanban</field>
         <field name="model">real_estate.tenant</field>
@@ -146,7 +134,8 @@
             </kanban>
         </field>
     </record>
-<!---Action-->
+
+    <!-- Action -->
     <record id="action_real_estate_tenant" model="ir.actions.act_window">
         <field name="name">Tenants</field>
         <field name="res_model">real_estate.tenant</field>

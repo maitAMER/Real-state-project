@@ -1,81 +1,85 @@
-
-  <odoo>
-  <template id="portal_my_leases" name="Tenant Portal - My Leases">
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_leases" name="Tenant Portal - My Leases">
         <t t-call="portal.portal_layout">
-            <div class="container mt16 o_portal_portlets">
-                <div class="row">
-                    <div class="col-12">
-                        <nav class="breadcrumb" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/my/home">My Account</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">My Leases</li>
-                            </ol>
-                        </nav>
-                        <h1 class="mb16">My Leases</h1>
-                        <t t-if="tenant">
-                            <p>
-                                Hello <strong><t t-esc="tenant.name"/></strong>. Below are the leases linked to your tenant account.
-                            </p>
-                        </t>
-                        <t t-else="">
-                            <div class="alert alert-warning" role="alert">
-                                No tenant record is linked to your user account. Please contact your property manager to enable portal lease access.
-                            </div>
-                        </t>
+            <t t-set="breadcrumb_seo" t-value="'My Leases'"/>
+            
+            <div class="container py-4">
+                <div class="row align-items-center mb-4">
+                    <div class="col">
+                        <h2 class="text-dark fw-bold mb-0">My Leases</h2>
                     </div>
                 </div>
-                <t t-if="leases">
+
+                <t t-if="tenant">
+                    <p class="text-muted mb-4">
+                        Hello <strong><t t-esc="tenant.name"/></strong>. Below are the leases linked to your tenant account.
+                    </p>
+                </t>
+                <t t-else="">
+                    <div class="alert alert-warning text-center py-3 shadow-sm mb-4" role="alert">
+                        <i class="fa fa-exclamation-triangle fa-lg me-2"></i>
+                        No tenant record is linked to your user account. Please contact your property manager to enable portal lease access.
+                    </div>
+                </t>
+
+                <t t-if="not leases">
+                    <div class="alert alert-info text-center py-4 shadow-sm" role="alert">
+                        <i class="fa fa-info-circle fa-2x mb-2 text-info"></i>
+                        <p class="mb-0">No leases were found for your tenant account.</p>
+                    </div>
+                </t>
+                
+                <t t-else="">
                     <div class="row">
                         <t t-foreach="leases" t-as="lease">
-                            <div class="col-md-6 mb16">
-                                <div class="card h-100">
+                            <div class="col-lg-4 col-md-6 mb-4">
+                                <div class="card border-0 shadow-sm h-100 rounded-lg overflow-hidden transition-hover">
+                                    
+                                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-light text-primary px-3 py-2 rounded-pill font-weight-bold">
+                                            <span t-esc="lease.property_id.property_type or 'N/A'"/>
+                                        </span>
+                                        <span class="badge bg-info-light text-info px-2 py-1">
+                                            <span t-esc="lease.state"/>
+                                        </span>
+                                    </div>
+
                                     <div class="card-body">
-                                        <h5 class="card-title mb-2">
+                                        <h4 class="card-title text-dark font-weight-bold mb-2">
                                             <t t-esc="lease.property_id.name or lease.name"/>
-                                        </h5>
-                                        <p class="text-muted mb-2">
-                                            <strong>Lease:</strong> <t t-esc="lease.name"/>
+                                        </h4>
+                                        <p class="text-muted small mb-3">
+                                            <strong>Lease Ref:</strong> <t t-esc="lease.name"/>
                                         </p>
-                                        <p class="mb-1">
-                                            <strong>Property Type:</strong>
-                                            <t t-esc="lease.property_id.property_type or 'N/A'"/>
-                                        </p>
-                                        <p class="mb-1">
-                                            <strong>Monthly Rent:</strong>
-                                            <t t-esc="lease.monthly_rent"/>
-                                        </p>
-                                        <p class="mb-1">
-                                            <strong>Status:</strong>
-                                            <t t-esc="lease.state"/>
-                                        </p>
-                                        <p class="mb-1">
-                                            <strong>Start:</strong>
-                                            <t t-esc="lease.start_date or '—'"/>
-                                        </p>
-                                        <p class="mb-1">
-                                            <strong>End:</strong>
-                                            <t t-esc="lease.end_date or '—'"/>
-                                        </p>
+                                        
+                                        <div class="property-details text-muted small">
+                                            <div class="d-flex justify-content-between py-1 border-bottom">
+                                                <span><i class="fa fa-money text-primary me-2"></i> Monthly Rent:</span>
+                                                <strong class="text-dark"><span t-field="lease.monthly_rent"/></strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between py-1 border-bottom pt-2">
+                                                <span><i class="fa fa-calendar-o text-primary me-2"></i> Start Date:</span>
+                                                <strong class="text-dark"><span t-esc="lease.start_date or '—'"/></strong>
+                                            </div>
+                                            <div class="d-flex justify-content-between py-1 pt-2">
+                                                <span><i class="fa fa-calendar-check-o text-primary me-2"></i> End Date:</span>
+                                                <strong class="text-dark"><span t-esc="lease.end_date or '—'"/></strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="card-footer bg-white border-0 pb-4 pt-0">
                                         <t t-if="lease.property_id">
-                                            <p class="mt-2">
-                                                <a t-att-href="'/property/%d/%s' % (lease.property_id.id, lease.property_id.name and lease.property_id.name.replace(' ', '-').lower() or '')" class="btn btn-sm btn-secondary">
-                                                    View Property Details
-                                                </a>
-                                            </p>
+                                            <a t-att-href="'/property/%d/%s' % (lease.property_id.id, lease.property_id.name and lease.property_id.name.replace(' ', '-').lower() or '')" class="btn btn-outline-primary btn-block w-100 rounded-pill font-weight-bold">
+                                                <i class="fa fa-eye me-1"></i> View Property Details
+                                            </a>
                                         </t>
                                     </div>
+
                                 </div>
                             </div>
                         </t>
-                    </div>
-                </t>
-                <t t-if="not leases">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="alert alert-info" role="alert">
-                                No leases were found for your tenant account.
-                            </div>
-                        </div>
                     </div>
                 </t>
             </div>
@@ -87,16 +91,14 @@
             <t t-set="portal_service_category_enable" t-value="True"/>
         </xpath>
         <div id="portal_service_category" position="inside">
-            <t>
-                <t t-call="portal.portal_docs_entry">
-                    <t t-set="icon" t-value="'fa fa-home'"/>
-                    <t t-set="title">My Leases</t>
-                    <t t-set="text">View your current leases and related property details.</t>
-                    <t t-set="url" t-value="'/my/leases'"/>
-                    <t t-set="config_card" t-value="True"/>
-                    <t t-set="placeholder_count" t-value="'lease_count'"/>
-                </t>
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'fa fa-home'"/>
+                <t t-set="title">My Leases</t>
+                <t t-set="text">View your current leases and related property details.</t>
+                <t t-set="url" t-value="'/my/leases'"/>
+                <t t-set="config_card" t-value="True"/>
+                <t t-set="placeholder_count" t-value="'lease_count'"/>
             </t>
         </div>
     </template>
-      </odoo>
+</odoo>

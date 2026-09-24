@@ -1,15 +1,17 @@
 # from my_adds.Real_state_project.real_estate.models.booking import booking
 from odoo import models, fields, api
-from odoo.addons.crm.populate.crm_lead import CrmLead
+from odoo.exceptions import UserError
+
+
 class Property(models.Model):
     _name = 'real_estate.property'
     _description = 'Real Estate Property'
 
     name = fields.Char(string='Property Name', required=True, index=True)
     description = fields.Text(string='Description', default='Description')
-    price = fields.Float(string='Monthly Rent', required=True) 
-    bedrooms = fields.Integer(string='Bedrooms')   
-    available = fields.Boolean(string='Available', default=True, index=True)    
+    price = fields.Float(string='Monthly Rent', required=True)
+    bedrooms = fields.Integer(string='Bedrooms')
+    available = fields.Boolean(string='Available', default=True, index=True)
     agent_id = fields.Many2one('res.users', string='sales person')
     property_type = fields.Selection([
         ('apartment', 'Apartment'),
@@ -19,24 +21,29 @@ class Property(models.Model):
     ], string='Property Type')
     deposit = fields.Float(string='Deposit')
 
-
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('pending', 'Pending'),
+        ('sold', 'Sold'),
+        ('closed', 'Closed')
+    ], string='Status', default='draft', tracking=True)
 
     lease_ids = fields.One2many(
-    'real_estate.lease', 
-    'property_id',          
-    string="Leases"
-)
-    
+        'real_estate.lease',
+        'property_id',
+        string="Leases"
+    )
+
     lease_count = fields.Integer(
         string='Lease Count',
         compute='_compute_lease_count',
         store=False,
     )
-    
 
     _sql_constraints = [
-        ('name_unique', 'unique(name)', 'Property name must be unique.')]
-    
+        ('name_unique', 'unique(name)', 'Property name must be unique.')
+    ]
+
     def mark_as_occupied(self):
         """Mark property as no longer available"""
         for record in self:
@@ -51,7 +58,6 @@ class Property(models.Model):
         """Write default description text into the description field"""
         for record in self:
             record.write({'description': 'Description'})
-
 
     def write_agent_name_to_description(self):
         """Write the linked agent name into the description field"""
@@ -73,25 +79,54 @@ class Property(models.Model):
         """Set property_type to the villa selection key"""
         for record in self:
             if record.available:
-             record.write({'property_type': 'villa'})
+                record.write({'property_type': 'villa'})
 
     def write(self, vals):
         for record in self:
             available = vals.get('available', record.available)
             if 'bedrooms' in vals and not available:
                 raise UserError(
-                    "You cannot edit the  bedrooms "
+                    "You cannot edit the bedrooms "
                 )
         return super(Property, self).write(vals)
-    
-  # البحث في نموذج البروبيرتي عن العقود المرتبطة بهذا البروبيرتي
+
+    # دوال الـ State
+    def action_pending(self):
+        for record in self:
+            record.state = 'pending'
+
+    def action_sold(self):
+        for record in self:
+            record.state = 'sold'
+
+    def action_closed(self):
+        for record in self:
+            record.state = 'closed'
+
+    def action_draft(self):
+        for record in self:
+            record.state = 'draft'
+
+    # دالة فتح الـ Wizard الجديدة
+    def action_open_change_state_wizard(self):
+        """Open the change state wizard"""
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Change State',
+            'res_model': 'change.state',
+            'view_mode': 'form',
+            'target': 'new',
+            'context': {
+                'default_property_id': self.id,
+            },
+        }
+
     @api.depends('lease_ids')
     def _compute_lease_count(self):
         for record in self:
             record.lease_count = len(record.lease_ids)
 
-
-# 2. دالة الانتقال عند الضغط على الزر
     def action_lease(self):
         self.ensure_one()
         return {
@@ -104,18 +139,3 @@ class Property(models.Model):
                 'default_property_id': self.id,
             },
         }
-
-    # @api.model
-    # def create(self, vals):
-    #         """Override create to generate lease reference"""
-    #         # if vals.get('name', 'New') == 'New':
-    #         vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.property')
-    #         return super(Property, self).create(vals)
-
-
-    # @api.model
-    # def check_bedrooms_greater_zero(self):
-    #     """Check if bedrooms is greater than 0"""
-    #     for record in self:
-    #         if record.bedrooms <= 0:
-    #             raise UserError("Bedrooms must be greater than 0.")
