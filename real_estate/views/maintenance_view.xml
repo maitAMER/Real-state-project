@@ -14,8 +14,6 @@
                 <field name="scheduled_date"/>
                 <field name="completion_date"/>
                 <field name="actual_cost"/>
-                 <field name="urgency"/>
-
             </tree>
         </field>
     </record>
@@ -33,8 +31,7 @@
                             <field name="lease_id"/>
                             <field name="issue_type"/>
                             <field name="urgency"/>
-                             <field name="user_id"/>
-
+                            <field name="user_id"/>
                         </group>
                         <group>
                             <field name="assigned_to"/>
@@ -64,11 +61,25 @@
             </p>
         </field>
     </record>
+
+    <!-- Cron 1 -->
     <record id="ir_cron_auto_schedule_emergency_requests" model="ir.cron">
         <field name="name">Maintenance: Auto Schedule Emergency Requests</field>
         <field name="model_id" ref="model_real_estate_maintenance_request"/>
         <field name="state">code</field>
         <field name="code">model._cron_auto_schedule_emergency()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
+    </record>
+
+    <record id="ir_cron_send_maintenance_reminders" model="ir.cron">
+        <field name="name">Real Estate: Send Maintenance Reminders</field>
+        <field name="model_id" ref="model_real_estate_maintenance_request"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_send_maintenance_reminders()</field>
         <field name="interval_number">1</field>
         <field name="interval_type">days</field>
         <field name="numbercall">-1</field>

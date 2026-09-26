@@ -17,14 +17,14 @@ class LeasePayment(models.Model):
     property_id = fields.Many2one(
         related='lease_id.property_id', string='Property', store=True)
 
-    due_date = fields.Date(string='Due Date', required=True, tracking=True)
-    amount = fields.Float(string='Amount Due', required=True, tracking=True)
-    late_fee = fields.Float(string='Late Fee', tracking=True)
+    due_date = fields.Date(string='Due Date', required=True)
+    amount = fields.Float(string='Amount Due', required=True)
+    late_fee = fields.Float(string='Late Fee')
     late_fee_applied = fields.Boolean(string='Late Fee Applied', default=False)
     total_amount = fields.Float(
         string='Total Amount', compute='_compute_total_amount', store=True)
 
-    payment_date = fields.Date(string='Payment Date', tracking=True)
+    payment_date = fields.Date(string='Payment Date')
     payment_method = fields.Selection([
         ('cash', 'Cash'),
         ('check', 'Check'),
@@ -38,7 +38,7 @@ class LeasePayment(models.Model):
         ('pending', 'Pending'),
         ('paid', 'Paid'),
         ('reconciled', 'Reconciled')
-    ], default='draft', required=True, tracking=True)
+    ], default='draft', required=True)
 
     notes = fields.Text(string='Notes')
 

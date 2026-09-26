@@ -1,5 +1,5 @@
 # from my_adds.Real_state_project.real_estate.models import booking
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo import models, fields, api, Command
 from datetime import date, datetime
 
@@ -8,6 +8,13 @@ class Tenant(models.Model):
     _name = 'real_estate.tenant'
     _description = 'Real Estate Tenant'
     _order = 'name asc'
+
+    profile_id = fields.Many2one(
+        'real_estate.tenant.profile',
+        string='Tenant Profile',
+        required=True,
+        ondelete='cascade',
+    )
 
     # === CORE FIELDS ===
     name = fields.Char(string='Tenant Name', required=True, index=True)
@@ -108,13 +115,14 @@ class Tenant(models.Model):
             },
         }
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """Generate a tenant sequence only when no name is provided."""
-        if not vals.get('name'):
-            vals['name'] = self.env['ir.sequence'].next_by_code(
-                'real_estate.tenant')
-        return super(Tenant, self).create(vals)
+        for vals in vals_list:
+            if not vals.get('name'):
+                vals['name'] = self.env['ir.sequence'].next_by_code(
+                    'real_estate.tenant')
+        return super().create(vals_list)
 
     @api.depends('date_of_birth')
     def _compute_age(self):
@@ -128,15 +136,23 @@ class Tenant(models.Model):
             else:
                 record.age = 0
 
-    _sql_constraints = [
-        ('email_unique', 'UNIQUE(email)',
-         'Email must be unique! This email is already registered.'),
-    ]
+    _inherits = {'real_estate.tenant.profile': 'profile_id'}
+
 
 
 
 
     #create_new_user_portal>>>>>>>>>>>>>
+    @api.constrains('email')
+    def _check_email_unique(self):
+        for tenant in self.filtered('email'):
+            duplicate = self.sudo().search_count([
+                ('email', '=', tenant.email),
+                ('id', '!=', tenant.id),
+            ])
+            if duplicate:
+                raise ValidationError('Email must be unique; this email is already registered.')
+
     def action_create_portal_user(self):
         self.ensure_one()
         if not self.email:

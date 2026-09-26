@@ -16,7 +16,7 @@ class booking(models.Model):
         ('confirmed', 'Confirmed'),
         ('converted', 'Converted to Lease'),
         ('cancelled', 'Cancelled')
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft')
     notes = fields.Text(string='Notes')
 
 

@@ -16,9 +16,10 @@ Long description of module's purpose
     # for the full list
     'category': 'Uncategorized',
     'version': '0.1',
+    'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'crm', 'portal'],
+    'depends': ['base', 'crm', 'portal', 'sale', 'mail'],
 
     # always loaded
     'data': [
@@ -31,6 +32,7 @@ Long description of module's purpose
         'wizard/booking.xml',
         'wizard/tenant.xml',
         'wizard/change_state_wizard_view.xml',
+        'data/mail_template_data.xml', 
         'views/views.xml',
         'views/portal_templates.xml',
         'views/portal_templates_mentenans.xml',
@@ -38,7 +40,10 @@ Long description of module's purpose
         'views/portal_payment.xml',
         'views/portal_tenant.xml',
         'views/templates.xml',
-        'views/property_views.xml',
+        'views/property_views.xml',    
+         'views/inherit_res_partner.xml',            
+        'views/inherit_sales.xml',
+        'views/inherit_tenant.xml',
         'views/tenant.xml',
         'views/payments.xml',
         'views/lease_view.xml',

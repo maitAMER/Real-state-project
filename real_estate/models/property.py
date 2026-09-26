@@ -26,7 +26,7 @@ class Property(models.Model):
         ('pending', 'Pending'),
         ('sold', 'Sold'),
         ('closed', 'Closed')
-    ], string='Status', default='draft', tracking=True)
+    ], string='Status', default='draft')
 
     lease_ids = fields.One2many(
         'real_estate.lease',

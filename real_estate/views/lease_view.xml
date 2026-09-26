@@ -15,7 +15,7 @@
                 <field name="deposit_paid"/>
                 <field name="booking_id"/>
                 <field name="state"/>
-
+                <button name="send_reminder_email" type="object" string="Email" icon="fa-envelope"/>
             </tree>
         </field>
     </record>
@@ -96,6 +96,9 @@
         <field name="arch" type="xml">
             <form string="Lease">
                 <header>
+                    <!-- زرار إرسال الإيميل الجديد -->
+                    <button name="send_reminder_email" type="object" string="Send Reminder Email" class="oe_highlight"/>
+                    
                     <button name="convert_to_active" type="object" string="Activate" class="oe_highlight" invisible="state == 'active'"/>
                     <button name="action_create_maintenance_request" type="object" string="Create Request" class="oe_highlight"/>
                     <button name="convert_to_draft" type="object" string="Mark as Draft" class="oe_highlight" invisible="state == 'draft'"/>
@@ -123,6 +126,8 @@
                             <field name="tenant_id"/>
                             <field name="user_id"/>
                             <field name="booking_id"/>
+                            <!-- حقل الـ Specialization -->
+                            <field name="specialization"/>
                         </group>
                         
                         <group string="Dates &amp; Timeline">
@@ -130,6 +135,9 @@
                             <field name="end_date"/>
                             <field name="duration_months"/>
                             <field name="next_electrical_charge"/>
+                            <!-- حقول الدفع والتذكير الجديدة -->
+                            <field name="next_payment_date"/>
+                            <field name="last_reminder_sent"/>
                         </group>
                     </group>
 
@@ -192,7 +200,7 @@
         <field name="search_view_id" ref="view_lease_search"/>
     </record>
 
-    <!-- Scheduled Action (Cron Job) - تم نقله هنا للخارج -->
+    <!-- Scheduled Action (Cron Job) -->
     <record id="ir_cron_auto_expire_leases" model="ir.cron">
         <field name="name">Real Estate: Auto Expire Leases</field>
         <field name="model_id" ref="model_real_estate_lease"/>

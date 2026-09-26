@@ -43,3 +43,30 @@ class RealEstatePortal(CustomerPortal):
             'page_name': 'property_detail',
         }
         return request.render("real_estate.portal_property_page", values)
+
+
+class PublicPropertyWebsite(http.Controller):
+
+    @http.route(['/', '/properties', '/properties/page/<int:page>'], type='http', auth="public", website=True)
+    def public_property_list(self, search_type=None, min_price=None, max_price=None, min_bedrooms=None, **kwargs):
+        domain = []
+        
+        if search_type:
+            domain.append(('property_type', 'ilike', search_type))
+        if min_price:
+            domain.append(('price', '>=', float(min_price)))
+        if max_price:
+            domain.append(('price', '<=', float(max_price)))
+        if min_bedrooms:
+            domain.append(('bedrooms', '>=', int(min_bedrooms)))
+
+        properties = request.env['real_estate.property'].sudo().search(domain, order='name desc')
+        
+        values = {
+            'properties': properties,
+            'search_type': search_type,
+            'min_price': min_price,
+            'max_price': max_price,
+            'min_bedrooms': min_bedrooms,
+        }
+        return request.render("real_estate.property_list_template", values)

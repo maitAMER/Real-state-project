@@ -23,3 +23,6 @@ access_tenant_wizard_manager,tenant.wizard.manager,model_real_estate_tenant_wiza
 access_tenant_wizard_user,tenant.wizard.user,model_real_estate_tenant_wizard,group_tenant_user,1,1,1,0
 access_lease_payment_user,lease.payment.user,model_lease_payment,base.group_user,1,1,1,1
 access_change_state,access_change_state,model_change_state,,1,1,1,1
+access_real_estate_tenant,access.real.estate.tenant,model_real_estate_tenant,,1,1,1,1
+access_tenant_profile_manager,tenant.profile.manager,model_real_estate_tenant_profile,group_tenant_manager,1,1,1,1
+access_tenant_profile_user,tenant.profile.user,model_real_estate_tenant_profile,group_tenant_user,1,1,1,0

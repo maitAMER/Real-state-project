@@ -93,12 +93,13 @@ class Lease(models.Model):
             raise UserError("Only Property Managers can delete a lease.")
         return super().unlink()
 
-    @api.model
-    def create(self, vals):
-        """Override create to generate lease reference"""
-        if not vals.get('name') or vals.get('name') == 'New' or vals.get('name') == '/':
-            vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.lease') or 'New'
-        return super(Lease, self).create(vals) 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Generate a lease reference for each new lease."""
+        for vals in vals_list:
+            if not vals.get('name') or vals.get('name') in ('New', '/'):
+                vals['name'] = self.env['ir.sequence'].next_by_code('real_estate.lease') or 'New'
+        return super().create(vals_list)
 
     def action_maintenance_requests(self):
         self.ensure_one()

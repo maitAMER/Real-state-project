@@ -10,8 +10,8 @@ class CrmLead(models.Model):
         ('house', 'House'),
         ('villa', 'Villa'),
         ('commercial', 'Commercial'),
-    ], string='Property Type', required=True)
-    monthly_rent = fields.Float(string='Monthly Rent', required=True)
+    ], string='Property Type')
+    monthly_rent = fields.Float(string='Monthly Rent')
     age_category = fields.Selection([
         ('a', '0-20'),
         ('b', '21-40'),

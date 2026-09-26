@@ -51,7 +51,6 @@
                                     </div>
                                     
                                     <div class="card-footer bg-white border-0 pb-4 pt-0">
-                                        <!-- تم تحديث الرابط هنا ليفتح صفحة تفاصيل العقار المحدد -->
                                         <a t-att-href="'/my/property/%s' % prop.id" class="btn btn-outline-primary btn-block w-100 rounded-pill font-weight-bold">
                                             <i class="fa fa-eye me-1"></i> View Details
                                         </a>
@@ -141,5 +140,99 @@
                 <t t-set="placeholder_count" t-value="'property_count'"/>
             </t>
         </div>
+    </template>
+
+    <!-- Template: Public Properties List with Filter Bar -->
+    <template id="property_list_template" name="Public Properties List">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container py-5">
+                    
+                    <!-- Title Header -->
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center">
+                            <h1 class="fw-bold text-dark">Available Properties</h1>
+                            <p class="text-muted">Explore our latest real estate listings available for rent and sale.</p>
+                        </div>
+                    </div>
+
+                    <!-- Filter Form Section -->
+                    <div class="card shadow-sm border-0 p-4 mb-5 bg-light rounded">
+                        <form action="/properties" method="get">
+                            <div class="row g-3 align-items-end">
+                                
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold text-muted">Property Type</label>
+                                    <input type="text" name="search_type" class="form-control" placeholder="All Types" t-att-value="search_type"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-muted">Min Price</label>
+                                    <input type="number" name="min_price" class="form-control" placeholder="0" t-att-value="min_price"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-muted">Max Price</label>
+                                    <input type="number" name="max_price" class="form-control" placeholder="Any" t-att-value="max_price"/>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label small fw-bold text-muted">Min Bedrooms</label>
+                                    <input type="number" name="min_bedrooms" class="form-control" placeholder="Any" t-att-value="min_bedrooms"/>
+                                </div>
+
+                                <div class="col-md-3 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary w-100 font-weight-bold">Search</button>
+                                    <a href="/properties" class="btn btn-secondary w-100">Clear</a>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Properties Grid Cards -->
+                    <t t-if="not properties">
+                        <div class="alert alert-warning text-center py-4" role="alert">
+                            <i class="fa fa-info-circle fa-2x mb-2"></i>
+                            <p class="mb-0">No properties available at the moment. Please check back later.</p>
+                        </div>
+                    </t>
+                    
+                    <t t-else="">
+                        <div class="row">
+                            <t t-foreach="properties" t-as="prop">
+                                <div class="col-lg-4 col-md-6 mb-4">
+                                    <div class="card border-0 shadow-sm h-100 rounded-lg overflow-hidden">
+                                        <div class="card-header bg-white border-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
+                                            <span class="badge bg-light text-primary px-3 py-2 rounded-pill font-weight-bold">
+                                                <span t-field="prop.property_type"/>
+                                            </span>
+                                        </div>
+
+                                        <div class="card-body">
+                                            <h4 class="card-title text-dark fw-bold mb-3">
+                                                <t t-esc="prop.name"/>
+                                            </h4>
+                                            
+                                            <div class="property-details text-muted small">
+                                                <div class="d-flex justify-content-between py-1 border-bottom">
+                                                    <span><i class="fa fa-money text-primary me-2"></i> Monthly Rent:</span>
+                                                    <strong class="text-dark"><span t-field="prop.price"/></strong>
+                                                </div>
+                                                <div class="d-flex justify-content-between py-1 pt-2">
+                                                    <span><i class="fa fa-bed text-primary me-2"></i> Bedrooms:</span>
+                                                    <strong class="text-dark"><span t-field="prop.bedrooms"/></strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+
+                </div>
+            </div>
+        </t>
     </template>
 </odoo>
