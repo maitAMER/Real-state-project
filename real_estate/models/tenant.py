@@ -25,6 +25,13 @@ class Tenant(models.Model):
     date_joined = fields.Date(string='Date Joined',
                               default=fields.Date.today, readonly=True)
     date_of_birth = fields.Date(string='Date of Birth')
+    company_type = fields.Selection(
+    selection=[
+        ('person', 'Individual'),
+        ('company', 'Company')
+    ],
+    string='Company Type'
+)
     notes = fields.Text(string='Notes')
     description = fields.Text(string='Description')
     # user_id = fields.Many2one('res.users', string='Related User', index=True)
@@ -136,7 +143,7 @@ class Tenant(models.Model):
             else:
                 record.age = 0
 
-    _inherits = {'real_estate.tenant.profile': 'profile_id'}
+    # _inherits = {'real_estate.tenant.profile': 'profile_id'}
 
 
 
@@ -181,3 +188,5 @@ class Tenant(models.Model):
                 'sticky': False,
             }
         }
+
+

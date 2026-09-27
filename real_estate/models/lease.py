@@ -45,6 +45,9 @@ class Lease(models.Model):
     end_date = fields.Date(string='End Date', required=True)
     payment_ids = fields.One2many('lease.payment', 'lease_id', string='Payments')
     monthly_rent = fields.Float(string='Monthly Rent', required=True)
+    next_payment_date = fields.Date(string='Last Reminder Sent')
+    last_reminder_sent = fields.Date(string='Last Reminder Sent', readonly=True)
+
     
     next_electrical_charge = fields.Date(
         string='Next Electrical Charge',
@@ -278,3 +281,9 @@ class Lease(models.Model):
         for record in self:
             if record.deposit_paid >= record.monthly_rent:
                 raise ValidationError("Validation Error: Deposit Paid must be less than the Monthly Rent!")
+
+
+
+    def action_print_lease_summary(self):
+        self.ensure_one()
+        return self.env.ref('real_estate.action_report_lease_summary').report_action(self)

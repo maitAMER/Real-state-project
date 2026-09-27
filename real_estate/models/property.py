@@ -139,3 +139,7 @@ class Property(models.Model):
                 'default_property_id': self.id,
             },
         }
+
+    def action_print_property_summary(self):
+        self.ensure_one()
+        return self.env.ref('real_eastate.action_report_property_summary').report_action(self)

@@ -112,6 +112,8 @@
     <button name="write_agent_name_to_description" string="Add Agent Name to Description" type="object" class="btn-primary"/>
     <button name="Increase_deposit" string="Increase Deposit" type="object" class="btn-primary"/>
     <button name="add_bedrooms" string="Add Bedrooms" type="object" class="btn-primary"/>
+    <button name="action_print_property_summary" string="Print Summary Report" type="object" class="btn-primary"/>
+
     
     <field name="available" invisible="1"/>
 

@@ -1,18 +1,13 @@
-.property_custom {
-    /* تنسيق هيدر الجدول */
-    .o_list_header {
-        background-color: #714B67 !important;
-        color: #ffffff !important;
-        font-weight: bold;
-    }
+.property_custom .o_list header {
+    background-color: #714B67 !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
 
-    /* تنسيق الصفوف والـ Hover */
-    .o_data_row {
-        &:nth-child(even) {
-            background-color: #f9f8f9 !important;
-        }
-        &:hover {
-            background-color: #f3efeef2 !important;
-        }
-    }
+.property_custom .o_data_row:nth-child(even) {
+    background-color: #f9f8f9 !important;
+}
+
+.property_custom .o_data_row:hover {
+background-color: #f3efef !important;
 }

@@ -7,6 +7,7 @@
         <field name="arch" type="xml">
             <tree string="Tenants">
                 <field name="name"/>
+                <field name="company_type"/>
                 <field name="phone"/>
                 <field name="mobile"/>
                 <field name="email"/>
@@ -28,6 +29,9 @@
                     <button name="action_create_portal_user" string="Create Portal User" type="object" class="btn-secondary"/>
                 </header>
                 <sheet>
+                    <!-- وضع الاختيار في الأعلى أفقياً مثل الـ Contacts -->
+                    <field name="company_type" widget="radio" options="{'horizontal': true}"/>
+
                     <div name="button_box" class="oe_button_box">
                         <button name="action_lease" type="object" class="oe_stat_button" icon="fa-wrench">
                             <field name="lease_count" widget="statinfo" string="Leases"/>
@@ -45,14 +49,14 @@
                             <field name="phone"/>
                             <field name="mobile"/>
                             <field name="city"/>
-                            <field name="age_category"/>
+                            <field name="age_category" invisible="company_type != 'person'"/>
                             <field name="user_id"/>
-                            <field name="age"/>
+                            <field name="age" invisible="company_type != 'person'"/>
                         </group>
 
                         <group string="Additional Information">
                             <field name="date_joined"/>
-                            <field name="date_of_birth"/>
+                            <field name="date_of_birth" invisible="company_type != 'person'"/>
                             <field name="active"/>
                             <field name="crm_id" readonly="1"/>
                         </group>
@@ -92,12 +96,14 @@
                 <field name="name"/>
                 <field name="email"/>
                 <field name="phone"/>
+                <field name="company_type"/>
                 <field name="age_category"/>
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
                 <separator/>
                 <group expand="0" string="Group By">
+                    <filter string="Company Type" name="group_by_company_type" context="{'group_by': 'company_type'}"/>
                     <filter string="Age Category" name="group_by_age_category" context="{'group_by': 'age_category'}"/>
                     <filter string="City" name="group_by_city" context="{'group_by': 'city'}"/>
                 </group>
@@ -133,6 +139,41 @@
                 </templates>
             </kanban>
         </field>
+    </record>
+
+    <!-- Tenant Profile views and action -->
+    <record id="view_tenant_profile_tree" model="ir.ui.view">
+        <field name="name">real_estate.tenant.profile.tree</field>
+        <field name="model">real_estate.tenant.profile</field>
+        <field name="arch" type="xml">
+            <tree string="Tenant Profiles">
+                <field name="profile_name"/>
+                <field name="profile_email"/>
+                <field name="profile_phone"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_tenant_profile_form" model="ir.ui.view">
+        <field name="name">real_estate.tenant.profile.form</field>
+        <field name="model">real_estate.tenant.profile</field>
+        <field name="arch" type="xml">
+            <form string="Tenant Profile">
+                <sheet>
+                    <group>
+                        <field name="profile_name"/>
+                        <field name="profile_email"/>
+                        <field name="profile_phone"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tenant_profile" model="ir.actions.act_window">
+        <field name="name">Tenant Profiles</field>
+        <field name="res_model">real_estate.tenant.profile</field>
+        <field name="view_mode">tree,form</field>
     </record>
 
     <!-- Action -->

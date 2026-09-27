@@ -7,11 +7,7 @@ class RealEstateLease(models.Model):
 
     next_payment_date = fields.Date(string='Next Payment Date')
     last_reminder_sent = fields.Date(string='Last Reminder Sent', readonly=True)
-    specialization = fields.Selection([
-        ('residential', 'Residential'),
-        ('commercial', 'Commercial'),
-    ], string='Specialization')
-    
+  
   
     def send_reminder_email(self):
         template_xml_id = 'real_estate.email_template_payment_upcoming'

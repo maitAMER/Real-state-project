@@ -32,7 +32,10 @@ Long description of module's purpose
         'wizard/booking.xml',
         'wizard/tenant.xml',
         'wizard/change_state_wizard_view.xml',
-        'data/mail_template_data.xml', 
+        'data/mail_template_data.xml',
+        'report/property_report_templates.xml',
+        'report/lease_report_templates.xml',
+        'report/report.xml',          
         'views/views.xml',
         'views/portal_templates.xml',
         'views/portal_templates_mentenans.xml',
@@ -43,7 +46,7 @@ Long description of module's purpose
         'views/property_views.xml',    
          'views/inherit_res_partner.xml',            
         'views/inherit_sales.xml',
-        'views/inherit_tenant.xml',
+        # 'views/inherit_tenant.xml',
         'views/tenant.xml',
         'views/payments.xml',
         'views/lease_view.xml',
@@ -56,8 +59,8 @@ Long description of module's purpose
     # Assets configuration for styling
     'assets': {
         'web.assets_backend': [
-            'real_estate/static/src/css/property.css',
-        ],
+    'real_estate/static/css/property.css',    
+    ],
     },
 
     # only loaded in demonstration mode

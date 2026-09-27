@@ -76,6 +76,11 @@ class MaintenanceRequest(models.Model):
         for req in emergency_requests:
             req.write({'scheduled_date': tomorrow})
 
+
+
+
+
+
     # cron_send_email
     def send_reminder_email(self):
         template_xml_id = 'real_estate.email_template_maintenance_upcoming'
