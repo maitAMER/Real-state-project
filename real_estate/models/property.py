@@ -8,10 +8,11 @@ class Property(models.Model):
     _description = 'Real Estate Property'
 
     name = fields.Char(string='Property Name', required=True, index=True)
+    external_id = fields.Char(string='External ID', index=True)
     description = fields.Text(string='Description', default='Description')
     price = fields.Float(string='Monthly Rent', required=True)
     bedrooms = fields.Integer(string='Bedrooms')
-    available = fields.Boolean(string='Available', default=True, index=True)
+    available = fields.Boolean(string='Available', default=lambda self: self.env['res.users'], index=True)
     agent_id = fields.Many2one('res.users', string='sales person')
     property_type = fields.Selection([
         ('apartment', 'Apartment'),
@@ -43,6 +44,8 @@ class Property(models.Model):
     _sql_constraints = [
         ('name_unique', 'unique(name)', 'Property name must be unique.')
     ]
+
+    payment_ids = fields.One2many('lease.payment', 'lease_id', string='Payments')
 
     def mark_as_occupied(self):
         """Mark property as no longer available"""
@@ -143,3 +146,13 @@ class Property(models.Model):
     def action_print_property_summary(self):
         self.ensure_one()
         return self.env.ref('real_eastate.action_report_property_summary').report_action(self)
+
+    def action_export_excel(self):
+        return {
+            'type': 'ir.actions.act_url',
+            'url': f'/real_estate/property/excel_export/{self.id}',
+            'target': 'self',
+        }
+
+
+

@@ -12,7 +12,6 @@ class Tenant(models.Model):
     profile_id = fields.Many2one(
         'real_estate.tenant.profile',
         string='Tenant Profile',
-        required=True,
         ondelete='cascade',
     )
 

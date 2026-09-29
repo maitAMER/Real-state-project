@@ -15,6 +15,13 @@ class MaintenanceRequest(models.Model):
         readonly=True,
         string='Property'
     )
+    tenant_id = fields.Many2one(
+    'real_estate.tenant', 
+    related='lease_id.tenant_id',
+    store=True,
+    readonly=True,
+    string='Tenant'
+)
     tenant_phone = fields.Char(string='Tenant Phone')
     preferred_date = fields.Date(string='Preferred Date')
     state = fields.Selection([

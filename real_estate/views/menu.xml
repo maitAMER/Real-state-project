@@ -63,4 +63,10 @@
               action="action_payments"
               sequence="20"/>
 
+    <menuitem id="menu_Reports"
+              name="Reports"
+              parent="menu_real_estate_root"
+              groups="real_estate.group_property_manager,real_estate.group_maintenance_manager"
+              sequence="25"/>
+
 </odoo>

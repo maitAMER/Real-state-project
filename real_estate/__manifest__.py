@@ -54,6 +54,8 @@ Long description of module's purpose
         'views/maintenance_view.xml',
         'views/crm_lead_view.xml',
         'views/menu.xml',
+        'wizard/lease_report_wizard_views.xml',
+        'wizard/tenant_report_wizard_views.xml',
     ],
 
     # Assets configuration for styling
