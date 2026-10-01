@@ -7,14 +7,14 @@ class Lease(models.Model):
     _name = 'real_estate.lease'
     _description = 'Property Lease Agreement'
 
-    name = fields.Char(string='Lease Reference', required=True, copy=False, readonly=True, default=lambda self: 'New')     
+    name = fields.Char(string='Lease Reference', required=False, copy=False, readonly=True, default=lambda self: 'New')     
 
     property_id = fields.Many2one(
         'real_estate.property',  
         string='Property',
         required=True,
         ondelete='cascade',
-        index=True
+        index=False
     )
     
     tenant_id = fields.Many2one(
@@ -44,7 +44,7 @@ class Lease(models.Model):
     start_date = fields.Date(string='Start Date', required=True)
     end_date = fields.Date(string='End Date', required=True)
     payment_ids = fields.One2many('lease.payment', 'lease_id', string='Payments')
-    monthly_rent = fields.Float(string='Monthly Rent', required=True)
+    monthly_rent = fields.Float(string='Monthly Rent', required=False)
     next_payment_date = fields.Date(string='Last Reminder Sent')
     last_reminder_sent = fields.Date(string='Last Reminder Sent', readonly=True)
 

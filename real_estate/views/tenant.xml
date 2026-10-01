@@ -12,6 +12,7 @@
                 <field name="mobile"/>
                 <field name="email"/>
                 <field name="city"/>
+                <field name="created_from_api"/>
                 <field name="date_joined"/>
             </tree>
         </field>
@@ -101,6 +102,7 @@
                 <separator/>
                 <filter string="Active" name="active" domain="[('active', '=', True)]"/>
                 <filter string="Inactive" name="inactive" domain="[('active', '=', False)]"/>
+                <filter string="Created from API" name="created_from_api" domain="[('created_from_api', '=', True)]"/>
                 <separator/>
                 <group expand="0" string="Group By">
                     <filter string="Company Type" name="group_by_company_type" context="{'group_by': 'company_type'}"/>

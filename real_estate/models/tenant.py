@@ -21,6 +21,7 @@ class Tenant(models.Model):
     phone = fields.Char(string='Phone Number')
     mobile = fields.Char(string='Mobile Number')
     city = fields.Char(string='City')
+    created_from_api = fields.Boolean(string='Created from API', default=False)
     date_joined = fields.Date(string='Date Joined',
                               default=fields.Date.today, readonly=True)
     date_of_birth = fields.Date(string='Date of Birth')
@@ -41,11 +42,7 @@ class Tenant(models.Model):
         'tenant_id',
         string='Leases'
     )
-    lease_ids = fields.One2many(
-        'real_estate.lease',
-        'property_id',
-        string="Leases"
-    )
+  
 
     lease_count = fields.Integer(
         string='Lease Count',
@@ -115,7 +112,7 @@ class Tenant(models.Model):
             'name': 'Leases',
             'res_model': 'real_estate.lease',
             'view_mode': 'tree,form',
-            'domain': [('property_id', '=', self.id)],
+            'domain': [('property_id', '=', self.lease_ids.property_id)],
             'context': {
                 'default_property_id': self.id,
             },
